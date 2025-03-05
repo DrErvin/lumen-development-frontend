@@ -1,0 +1,48 @@
+.admin-header {
+  text-align: center;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.header-title {
+  font-size: 2rem;
+  color: #333;
+  font-weight: 800;
+  margin: 0;
+}
+
+.header-text {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .header-title {
+    font-size: 1.8rem;
+  }
+
+  .header-text {
+    font-size: 1.1rem;
+  }
+}
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 1.6rem;
+  }
+
+  .header-text {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 1.4rem;
+  }
+
+  .header-text {
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,319 @@
+/* Cards List */
+/* Opportunities List Section */
+.opportunities-list {
+  padding: 40px 0;
+  padding-top: 0;
+}
+
+.opportunity-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+  margin-bottom: 1rem;
+}
+
+.opportunity-card:last-child {
+  margin-bottom: 0;
+}
+
+.card-logo {
+  width: 50px;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0; /* Prevent overflowing */
+}
+
+.card-type {
+  font-size: 1.2rem;
+  color: #888;
+  margin: 0;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 5px 0 0;
+  white-space: wrap;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
+}
+
+.card-details {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  align-items: center;
+  flex-shrink: 0; /* Prevent shrinking */
+  justify-content: flex-end;
+}
+
+.card-detail-item {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+}
+
+.last-item {
+  width: 100px;
+}
+
+.card-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.card-detail-label img {
+  width: 16px;
+  height: 16px;
+}
+
+.card-icon {
+  width: 19px;
+  height: 19px;
+  fill: var(--color-primary);
+}
+
+.card-detail-item p {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  padding-top: 2px;
+  word-wrap: break-word;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card-btn {
+  font-family: 'TeleNeoWeb';
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  margin-left: auto;
+}
+
+.card-btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.pagination-icon {
+  width: 2rem;
+  height: 2rem;
+  fill: var(--color-primary);
+  margin-bottom: 5px;
+  /* Space between icon and text */
+}
+
+.pagination-btn span {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.pagination-btn:hover .pagination-icon {
+  fill: var(--color-primary-darker-hard);
+}
+
+.pagination-btn:hover {
+  color: var(--color-primary-darker-hard);
+}
+
+.spinner {
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.spinner svg {
+  height: 4rem;
+  width: 4rem;
+  fill: var(--color-primary);
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error svg {
+  width: 2rem;
+  height: 2rem;
+  fill: var(--color-primary);
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  /* Cards List */
+  /* Opportunities List Section */
+  .opportunities-list {
+    padding: 20px 0;
+  }
+
+  .opportunity-card {
+    padding: 15px;
+    gap: 15px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-details {
+    gap: 1rem;
+  }
+
+  .card-detail-item {
+    width: auto;
+  }
+
+  .card-btn {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Cards List */
+  /* Opportunities List Section */
+  .opportunity-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 15px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .card-info {
+    flex: 1;
+    text-align: left;
+  }
+
+  .card-type,
+  .card-title {
+    text-align: left;
+  }
+
+  .card-details {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-top: 10px;
+  }
+
+  .card-detail-item {
+    width: auto;
+    text-align: center;
+  }
+
+  .card-btn {
+    flex-basis: 100%;
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Cards List */
+  /* Opportunities List Section */
+  .opportunity-card {
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .card-logo {
+    width: 40px;
+    margin-bottom: 10px;
+  }
+
+  .card-info {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .card-detail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    text-align: center;
+  }
+
+  .card-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+  }
+}

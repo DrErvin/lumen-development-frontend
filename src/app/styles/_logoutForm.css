@@ -1,0 +1,161 @@
+/* Logout Form Styling */
+
+.logout-form-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  background-color: var(--color-ternary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+.logout__column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.logout__heading {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.logout__message {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-primary-darker);
+}
+
+#logoutUserName {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.logout__btn {
+  font-family: 'TeleNeoWeb', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-ternary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  /* margin-top: 20px; */
+  margin: 15px auto 0;
+}
+
+.logout__btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.logout__btn svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  fill: var(--color-ternary);
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  .logout-form-window {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .logout__heading {
+    font-size: 1.4rem;
+  }
+
+  .logout__message {
+    font-size: 1rem;
+  }
+
+  #logoutUserName {
+    font-size: 1rem;
+  }
+
+  .logout__btn {
+    font-size: 1rem;
+    padding: 12px 18px;
+  }
+
+  .logout__btn svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .logout-form-window {
+    width: 95%; /* Narrower form for smaller screens */
+    padding: 15px;
+  }
+
+  .logout__heading {
+    font-size: 1.2rem;
+  }
+
+  .logout__message {
+    font-size: 0.9rem;
+  }
+
+  #logoutUserName {
+    font-size: 0.95rem;
+  }
+
+  .logout__btn {
+    font-size: 0.8rem;
+    padding: 10px 15px;
+  }
+
+  .logout__btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logout-form-window {
+    width: 95%; /* Keep width consistent for small devices */
+    padding: 10px;
+  }
+
+  .logout__heading {
+    font-size: 1rem;
+  }
+
+  .logout__message {
+    font-size: 0.85rem;
+  }
+
+  #logoutUserName {
+    font-size: 0.9rem;
+  }
+
+  .logout__btn {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+
+  .logout__btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}

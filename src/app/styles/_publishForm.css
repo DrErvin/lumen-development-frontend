@@ -1,0 +1,275 @@
+/* Publish Opportunity Form Styling */
+.hidden-oppacity {
+  visibility: hidden;
+  opacity: 0;
+}
+/* .publish-opportunity-window.hidden-oppacity {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay.hidden-oppacity {
+  visibility: hidden;
+  opacity: 0;
+} */
+
+.publish-opportunity-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; /* Increased width */
+  max-width: 1100px; /* Adjusted for a wider layout */
+  background-color: var(--color-ternary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh; /* Ensures it fits smaller screens */
+  box-sizing: border-box; /* Ensures padding is included in width/height */
+  transition: all 0.5s;
+}
+
+.btn--close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-primary-darker);
+  cursor: pointer;
+}
+
+.btn--close-modal:hover {
+  color: var(--color-primary);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s;
+}
+
+.upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 40px; /* Space for the close button */
+  align-items: flex-start; /* Ensure inputs align properly */
+}
+
+.upload__column {
+  flex: 1 1 calc(50% - 20px); /* Two columns, each taking 50% width minus the gap */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 260px; /* Ensure minimum width to prevent overflow */
+}
+
+.upload__heading {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.publish-opportunity-window label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 5px;
+}
+
+.publish-opportunity-window input,
+.publish-opportunity-window select,
+.publish-opportunity-window textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #666;
+  margin-bottom: 10px; /* Space between inputs */
+  box-sizing: border-box; /* Ensure padding fits within the width */
+  transition: all 0.2s;
+}
+
+.publish-opportunity-window textarea {
+  resize: vertical;
+  min-height: 100px; /* Adjust height for job description */
+}
+
+.publish-opportunity-window input:focus,
+.publish-opportunity-window select:focus,
+.publish-opportunity-window textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.upload__btn {
+  font-family: 'TeleNeoWeb', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-ternary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 20px auto 0; /* Centered button */
+}
+
+.upload__btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.upload__btn svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  fill: var(--color-ternary);
+}
+.message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.message svg {
+  width: 2.1rem;
+  height: 2.1rem;
+  fill: var(--color-primary);
+}
+.message p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-text, #333);
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  /* Publish Opportunity Form  */
+  .publish-opportunity-window {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Publish Opportunity Form  */
+  .publish-opportunity-window {
+    width: 95%; /* Make the form fit almost the full width */
+    max-width: none; /* Remove the max-width restriction */
+    padding: 15px; /* Adjust padding for smaller screens */
+    box-sizing: border-box; /* Ensure padding fits within width */
+  }
+
+  .upload {
+    flex-direction: column; /* Stack columns vertically */
+    gap: 15px; /* Slightly reduce gap between elements */
+  }
+
+  .upload__column {
+    width: 100%; /* Ensure each column spans the full width */
+    min-width: auto; /* Remove minimum width to prevent overflow */
+  }
+
+  .btn--close-modal {
+    top: 9px; /* Adjust the close button position */
+    right: 13px;
+    font-size: 1.3rem; /* Slightly smaller for smaller screens */
+  }
+
+  .publish-opportunity-window input,
+  .publish-opportunity-window select,
+  .publish-opportunity-window textarea {
+    font-size: 0.9rem; /* Slightly reduce font size for inputs */
+    padding: 8px; /* Adjust padding for smaller inputs */
+  }
+
+  .upload__heading {
+    font-size: 1.3rem; /* Adjust the heading size */
+    margin-bottom: 15px; /* Reduce margin */
+    text-align: center;
+  }
+
+  .upload__btn {
+    width: 100%; /* Make the button span the full width */
+    padding: 10px; /* Adjust button padding */
+    /* font-size: 1rem; */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Publish Opportunity Form  */
+  /* Adjust the form container */
+  .publish-opportunity-window {
+    width: 95%;
+    padding: 10px;
+    max-height: 85vh;
+    overflow-y: auto; /* Ensure it scrolls properly if content overflows */
+  }
+
+  .btn--close-modal {
+    top: 5px;
+    right: 10px;
+    font-size: 1.2rem;
+  }
+
+  /* Stack columns vertically */
+  .upload {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .upload__column {
+    width: 100%;
+    flex: none; /* Prevents unwanted resizing */
+    gap: 10px; /* Reduce the gap between inputs */
+  }
+
+  .upload__heading {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* Adjust inputs and textareas */
+  .publish-opportunity-window input,
+  .publish-opportunity-window select,
+  .publish-opportunity-window textarea {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .publish-opportunity-window textarea {
+    min-height: 80px; /* Adjust the height for smaller screens */
+  }
+
+  .upload__btn {
+    width: 100%;
+    padding: 10px;
+    /* font-size: 1rem; */
+    margin-top: 15px;
+  }
+
+  /* Simplify icon size in buttons */
+  .upload__btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

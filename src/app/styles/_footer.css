@@ -1,0 +1,40 @@
+/* Footer Section */
+.main-footer {
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  /* ////////////////////////////////// */
+  /* Footer Section */
+  .main-footer {
+    padding: 15px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* ////////////////////////////////// */
+  /* Footer Section */
+  .main-footer {
+    padding: 10px;
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* ////////////////////////////////// */
+  /* Footer Section */
+  .main-footer {
+    padding: 10px;
+    max-width: 100%;
+    font-size: 0.85rem;
+  }
+}

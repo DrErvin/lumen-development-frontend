@@ -1,0 +1,365 @@
+/* Content for Details Opportunity Page */
+.company-logo {
+  width: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.details-opportunity {
+  padding: 40px 0;
+  background-color: var(--color-secondary);
+  min-height: 60vh;
+  text-align: center;
+}
+
+.details-container {
+  text-align: left;
+  background-color: var(--color-ternary);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.details-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.opportunity-title {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0;
+  font-weight: 800;
+}
+
+.opportunity-type,
+.opportunity-tags {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 0;
+}
+
+/* Adjust location font and position */
+.opportunity-location {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+/* Not needed only for preview */
+.opportunity-tags a {
+  color: var(--color-primary);
+  margin-right: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.opportunity-tags span {
+  color: var(--color-primary);
+  margin-right: 10px;
+}
+
+/* Job Information Section (Position, Engagement, Deadline, Location) */
+.opportunity-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* gap: 30px; */
+}
+
+.opportunity-info div {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 250px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.icon-opport-header {
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Apply Now Button Styling */
+.apply-button {
+  text-align: center;
+  margin-top: 20px;
+}
+/*
+.apply-now-btn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.apply-now-btn:hover {
+  background-color: var(--color-primary-darker);
+} */
+
+.apply-now-btn {
+  font-family: 'TeleNeoWeb';
+  font-weight: 700;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.apply-now-btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.apply-now-btn:focus {
+  outline: none;
+}
+
+/* Job Description, Profile, and Offer Sections */
+.opportunity-section {
+  margin: 30px 0;
+}
+
+.opportunity-section h2 {
+  font-size: 1.7rem;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.opportunity-section p {
+  font-size: 1.2rem;
+}
+
+.opportunity-section ul {
+  font-size: 1.2rem;
+  list-style-type: disc;
+  padding-left: 20px;
+  /* color: #666; */
+}
+
+/* Contact Person Section */
+.contact-person-section {
+  /* text-align: center; */
+  /* margin-top: 30px; */
+  /* padding: 20px; */
+  /* background-color: var(--color-secondary); */
+  border-radius: 5px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.contact-person-section h2 {
+  /* font-size: 1.8rem; */
+  color: var(--color-primary);
+  /* color: #666; */
+  margin-bottom: 0;
+}
+
+.contact-person-details {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 10px;
+}
+
+.contact-person-image {
+  width: 120px;
+  /* height: 80px; */
+  border-radius: 5px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.contact-person-info {
+  text-align: left;
+  font-size: 1.2rem;
+  /* color: #666; */
+}
+
+.contact-person-info p {
+  margin: 5px 0;
+}
+
+.contact-person-info a {
+  color: var(--color-primary);
+  text-decoration: none;
+  border: none;
+  padding: 3px;
+}
+
+.contact-person-info a:visited {
+  text-decoration: underline;
+}
+
+.contact-person-info a:hover {
+  text-decoration: underline;
+}
+
+.contact-person-info a:focus:active {
+  outline: none;
+  border: 2px dotted var(--color-primary-darker);
+  padding: 3px;
+}
+
+.download-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#download-pdf-btn {
+  font-family: 'TeleNeoWeb';
+  font-weight: 700;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+}
+
+#download-pdf-btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  /* ////////////////////////////////// */
+  /* Content for Opportunity Details Page */
+  .details-container {
+    max-width: 80%;
+    padding: 15px;
+  }
+
+  .opportunity-title {
+    font-size: 2rem;
+  }
+
+  .opportunity-type,
+  .opportunity-tags {
+    font-size: 1.1rem;
+  }
+
+  .opportunity-info div {
+    min-width: 200px;
+    margin-bottom: 15px; /* Adds spacing for wrap alignment */
+  }
+
+  .apply-now-btn {
+    font-size: 1.1rem;
+    padding: 8px 16px;
+  }
+
+  #download-pdf-btn {
+    font-size: 1.1rem;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Content for Opportunity Details Page */
+  .details-container {
+    padding: 10px;
+    max-width: 90%;
+  }
+
+  .opportunity-title {
+    font-size: 1.8rem;
+  }
+
+  .opportunity-type,
+  .opportunity-tags {
+    font-size: 1rem;
+  }
+
+  .opportunity-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .opportunity-info div {
+    min-width: auto;
+    justify-content: center;
+  }
+
+  .apply-now-btn {
+    font-size: 1rem;
+    padding: 8px 14px;
+  }
+
+  .opportunity-section h2 {
+    font-size: 1.5rem;
+  }
+
+  #download-pdf-btn {
+    font-size: 1rem;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Content for Opportunity Details Page */
+  .details-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .company-logo {
+    width: 40px;
+  }
+
+  .opportunity-title {
+    font-size: 1.5rem;
+  }
+
+  .opportunity-type,
+  .opportunity-tags {
+    font-size: 0.9rem;
+  }
+
+  .apply-now-btn {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+
+  .opportunity-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .contact-person-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .opportunity-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .opportunity-info div {
+    margin-bottom: 10px;
+  }
+
+  #download-pdf-btn {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+}

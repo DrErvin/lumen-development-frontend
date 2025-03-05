@@ -1,0 +1,219 @@
+/* Sign-Up Form Styling */
+
+.disclaimer {
+  background-color: var(--color-secondary);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  /* margin-top: 20px; */
+  text-align: center;
+}
+
+.disclaimer p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+}
+
+.signup-form-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background-color: var(--color-ternary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+.signup__column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signup__heading {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.signup-form label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-primary-darker);
+  margin-bottom: 5px;
+}
+
+.signup-form input,
+.signup-form select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #666;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.signup-form input:focus,
+.signup-form select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.signup__btn {
+  font-family: 'TeleNeoWeb', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-ternary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  /* margin-top: 15px; */
+  margin: 15px auto 0;
+}
+
+.signup__btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.signup__btn svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  fill: var(--color-ternary);
+}
+
+.note {
+  font-size: 1rem;
+  color: #666;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.signup__emailError {
+  color: #666;
+  font-size: 1rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  .signup__heading {
+    font-size: 1.3rem;
+  }
+
+  .signup-form label {
+    font-size: 0.85rem;
+  }
+
+  .signup-form input,
+  .signup-form select {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .signup__btn {
+    font-size: 0.85rem;
+  }
+
+  .signup__btn svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .disclaimer p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .signup-form-window {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .signup__heading {
+    font-size: 1.2rem;
+  }
+
+  .signup-form label {
+    font-size: 0.8rem;
+  }
+
+  .signup-form input,
+  .signup-form select {
+    font-size: 0.8rem;
+    padding: 7px;
+  }
+
+  .signup__btn {
+    font-size: 0.8rem;
+  }
+
+  .signup__btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .disclaimer p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-form-window {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .signup__heading {
+    font-size: 1rem;
+  }
+
+  .signup-form label {
+    font-size: 0.75rem;
+  }
+
+  .signup-form input,
+  .signup-form select {
+    font-size: 0.75rem;
+    padding: 6px;
+  }
+
+  .signup__btn {
+    font-size: 0.75rem;
+  }
+
+  .signup__btn svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .disclaimer p {
+    font-size: 0.75rem;
+  }
+}

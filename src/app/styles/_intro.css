@@ -1,0 +1,59 @@
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Main content body */
+/* Intro Section  */
+.intro-section {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.intro-title {
+  font-size: 2.5rem;
+  color: #333;
+  font-weight: 800;
+}
+
+.intro-text {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  /* ////////////////////////////////// */
+  /* Main content body */
+  .intro-title {
+    font-size: 2rem;
+  }
+
+  .intro-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* ////////////////////////////////// */
+  /* Main content body */
+  .intro-title {
+    font-size: 1.8rem;
+  }
+
+  .intro-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* ////////////////////////////////// */
+  /* Main content body */
+  .intro-title {
+    font-size: 1.5rem;
+  }
+
+  .intro-text {
+    font-size: 0.9rem;
+  }
+}

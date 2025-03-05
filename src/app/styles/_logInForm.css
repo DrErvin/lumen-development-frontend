@@ -1,0 +1,256 @@
+/* Login Form Styling */
+/* .login-form-window.hidden-oppacity {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay.hidden-oppacity {
+  visibility: hidden;
+  opacity: 0;
+} */
+
+.login-form-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background-color: var(--color-ternary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 90vh;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+/* .btn--close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-primary-darker);
+  cursor: pointer;
+}
+
+.btn--close-modal:hover {
+  color: var(--color-primary);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s;
+} */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.login__column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login__heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.login-form label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 5px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #666;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.login__btn {
+  font-family: 'TeleNeoWeb', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: var(--color-primary);
+  color: var(--color-ternary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  /* margin-top: 10px; */
+  margin: 15px auto 0;
+}
+
+.login__btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.login__btn svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  fill: var(--color-ternary);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.message svg {
+  width: 2.1rem;
+  height: 2.1rem;
+  fill: var(--color-primary);
+}
+.message p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-text, #333);
+}
+
+.login__footer {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.show__signup__btn {
+  font-family: 'TeleNeoWeb', sans-serif;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.show__signup__btn:hover {
+  color: var(--color-primary-darker);
+  text-decoration: underline;
+}
+
+/* ////////////////////////////////// */
+/* ////////////////////////////////// */
+/* Responsive Styling */
+@media (max-width: 1024px) {
+  .login-form-window {
+    max-width: 450px;
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login__heading {
+    font-size: 1.3rem; /* Slightly smaller heading font */
+  }
+
+  .login-form label {
+    font-size: 1rem;
+  }
+
+  .login-form input {
+    font-size: 1rem;
+  }
+
+  .login__btn {
+    font-size: 1rem;
+  }
+
+  .login__btn svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  /* .btn--close-modal {
+    font-size: 1.2rem; 
+  } */
+
+  .login__footer {
+    font-size: 1rem;
+  }
+
+  .show__signup__btn {
+    font-size: 1rem;
+  }
+
+  .message p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login__heading {
+    font-size: 1rem;
+  }
+
+  .login-form label {
+    font-size: 0.8rem;
+  }
+
+  .login-form input {
+    font-size: 0.8rem;
+  }
+
+  .login__btn {
+    font-size: 0.9rem;
+  }
+
+  .login__btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  /* .btn--close-modal {
+    font-size: 1rem;
+  } */
+
+  .login__footer {
+    font-size: 0.8rem;
+  }
+
+  .show__signup__btn {
+    font-size: 0.8rem;
+  }
+
+  .message p {
+    font-size: 0.8rem;
+  }
+}
