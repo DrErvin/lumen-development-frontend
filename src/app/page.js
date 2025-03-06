@@ -1,4 +1,31 @@
+"use client";
+import { useState } from "react";
+import SearchForm from "../components/SearchForm.js";
+// Import other components as needed, for example a ResultsList component
+// import ResultsList from "../components/ResultsList";
+import * as model from "../utils/model";
+
 export default function Home() {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Handler function to process search queries
+  const handleSearch = async (query) => {
+    try {
+      setLoading(true);
+      setError(null);
+      // Use your model's function to load search results
+      await model.loadSearchResults(query);
+      // Get the first page results (or however you want to slice them)
+      const searchResults = model.getSearchResultsPage();
+      setResults(searchResults);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <main>
       {/* Header Section */}
@@ -62,57 +89,19 @@ export default function Home() {
         {/* Search Form Section */}
         <section className="search-section">
           <div className="container search-container">
-            <form className="search-form">
-              <div className="search-inputs">
-                <input type="text" placeholder="Location" />
-                <input type="text" placeholder="Title or Keyword" />
-                <select
-                  name="field-of-study"
-                  className="dropdown"
-                  id="field-of-study"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Select Field of Study
-                  </option>
-                  <option>Architecture</option>
-                  <option>Software Engineering</option>
-                  <option>Computer Sciences and Engineering</option>
-                  <option>
-                    Artificial Intelligence and Data Engineering
-                  </option>
-                  <option>Genetics and Bioengineering</option>
-                  <option>
-                    Electrical and Electronics Engineering
-                  </option>
-                  <option>Mechanical Engineering</option>
-                  <option>
-                    Visual Arts and Visual Communications Design
-                  </option>
-                  <option>Media and Communication</option>
-                </select>
-                <select
-                  name="type"
-                  className="dropdown"
-                  id="type"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Select Type
-                  </option>
-                  <option>Thesis Topic</option>
-                  <option>Internship</option>
-                  <option>Job Offer</option>
-                  <option>Mentorship</option>
-                  <option>Extra Curriculum Project</option>
-                </select>
-              </div>
-              <button className="btn-search" type="submit">
-                Search
-              </button>
-            </form>
+            <SearchForm onSearch={handleSearch} />
           </div>
         </section>
+        {/* Optionally render loading, error, or results */}
+        {loading && (
+          <div className="spinner">
+            <svg>
+              <use href="/img/icons.svg#icon-loading" />
+            </svg>
+          </div>
+        )}
+        {error && <div className="error">{error}</div>}
+        {/* <ResultsList results={results} /> */}
 
         {/* Featured Opportunities Section */}
         <section
