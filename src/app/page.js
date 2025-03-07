@@ -2,19 +2,26 @@
 import { useState } from "react";
 import SearchForm from "../components/SearchForm.js";
 // Import other components as needed, for example a ResultsList component
-// import ResultsList from "../components/ResultsList";
+import ResultsList from "../components/ResultsList";
+import ErrorMessage from "../components/ErrorMessage";
+import IntroSection from "../components/IntroSection";
 import * as model from "../utils/model";
 
 export default function Home() {
   const [results, setResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false); // New state
 
   // Handler function to process search queries
   const handleSearch = async (query) => {
     try {
       setLoading(true);
       setError(null);
+      setHasSearched(true); // Mark that a search was performed
+      setSearchQuery(query);
+
       // Use your model's function to load search results
       await model.loadSearchResults(query);
       // Get the first page results (or however you want to slice them)
@@ -22,10 +29,12 @@ export default function Home() {
       setResults(searchResults);
     } catch (err) {
       setError(err.message);
+      setHasSearched(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <main>
       {/* Header Section */}
@@ -71,19 +80,24 @@ export default function Home() {
         </nav>
       </header>
 
+      {/* Intro Section */}
       {/* Search and Featured Opportunities Sections */}
       <div id="main-content" className="">
         {/* Main Content with Search Form and Intro Text */}
         <section className="intro-section">
-          <div className="container">
-            <h1 className="intro-title">
-              Headstart your career with Deutsche Telekom
-            </h1>
-            <p className="intro-text">
-              Search from thousands of student opportunities in
-              multiple sectors and locations.
-            </p>
-          </div>
+          {hasSearched && searchQuery ? (
+            <IntroSection query={searchQuery} />
+          ) : (
+            <div className="container">
+              <h1 className="intro-title">
+                Headstart your career with Deutsche Telekom
+              </h1>
+              <p className="intro-text">
+                Search from thousands of student opportunities in
+                multiple sectors and locations.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Search Form Section */}
@@ -92,6 +106,7 @@ export default function Home() {
             <SearchForm onSearch={handleSearch} />
           </div>
         </section>
+
         {/* Optionally render loading, error, or results */}
         {loading && (
           <div className="spinner">
@@ -100,21 +115,38 @@ export default function Home() {
             </svg>
           </div>
         )}
-        {error && <div className="error">{error}</div>}
-        {/* <ResultsList results={results} /> */}
+
+        {/* If we have a global error, show the ErrorMessage component */}
+        {error && <ErrorMessage text={error} />}
+
+        {/* Results List Section */}
+        {hasSearched && !loading && !error && (
+          <section className="opportunities-list">
+            <div className="container">
+              <h2>Available Opportunities</h2>
+              {results.length > 0 ? (
+                <ResultsList results={results} />
+              ) : (
+                <ErrorMessage text="No opportunities found for your query! Please try again." />
+              )}
+            </div>
+          </section>
+        )}
 
         {/* Featured Opportunities Section */}
-        <section
-          id="featured-section"
-          className="featured-opportunity"
-        >
-          <div className="container">
-            <h2>Featured Opportunities</h2>
-            <div className="opportunities-grid">
-              {/* Opportunities will be dynamically inserted here */}
+        {!hasSearched && (
+          <section
+            id="featured-section"
+            className="featured-opportunity"
+          >
+            <div className="container">
+              <h2>Featured Opportunities</h2>
+              <div className="opportunities-grid">
+                {/* Opportunities will be dynamically inserted here */}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Opportunities List Section */}
         <section className="opportunities-list hidden">
