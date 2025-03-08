@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchForm from "../components/SearchForm.js";
 // Import other components as needed, for example a ResultsList component
 import ResultsList from "../components/ResultsList";
 import ErrorMessage from "../components/ErrorMessage";
+import LoadingSpinner from "../components/LoadingSpinner.js";
 import IntroSection from "../components/IntroSection";
+import FeaturedOpportunities from "../components/FeaturedOpportunities";
 import * as model from "../utils/model";
+import { scrollToTop } from "../utils/helpers";
 
 export default function Home() {
   const [results, setResults] = useState([]);
@@ -14,9 +17,15 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false); // New state
 
+  // New state for featured opportunities
+  const [featured, setFeatured] = useState([]);
+  const [featuredLoading, setFeaturedLoading] = useState(true);
+  const [featuredError, setFeaturedError] = useState(null);
+
   // Handler function to process search queries
   const handleSearch = async (query) => {
     try {
+      scrollToTop();
       setLoading(true);
       setError(null);
       setHasSearched(true); // Mark that a search was performed
@@ -28,12 +37,32 @@ export default function Home() {
       const searchResults = model.getSearchResultsPage();
       setResults(searchResults);
     } catch (err) {
+      console.error(err);
       setError(err.message);
       setHasSearched(true);
     } finally {
       setLoading(false);
     }
   };
+
+  // Load featured opportunities on component mount
+  useEffect(() => {
+    async function loadFeatured() {
+      try {
+        setFeaturedLoading(true);
+        const data = await model.fetchFeatured();
+        setFeatured(data);
+      } catch (err) {
+        console.error(err);
+        setFeaturedError(
+          "No featured opportunities found. Please try again later!"
+        );
+      } finally {
+        setFeaturedLoading(false);
+      }
+    }
+    loadFeatured();
+  }, []);
 
   return (
     <main>
@@ -108,13 +137,7 @@ export default function Home() {
         </section>
 
         {/* Optionally render loading, error, or results */}
-        {loading && (
-          <div className="spinner">
-            <svg>
-              <use href="/img/icons.svg#icon-loading" />
-            </svg>
-          </div>
-        )}
+        {loading && <LoadingSpinner />}
 
         {/* If we have a global error, show the ErrorMessage component */}
         {error && <ErrorMessage text={error} />}
@@ -141,9 +164,11 @@ export default function Home() {
           >
             <div className="container">
               <h2>Featured Opportunities</h2>
-              <div className="opportunities-grid">
-                {/* Opportunities will be dynamically inserted here */}
-              </div>
+              <FeaturedOpportunities
+                data={featured}
+                loading={featuredLoading}
+                error={featuredError}
+              />
             </div>
           </section>
         )}

@@ -1,9 +1,11 @@
-import { TIMEOUT_SEC } from './config.js';
+import { TIMEOUT_SEC } from "./config.js";
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
+      reject(
+        new Error(`Request took too long! Timeout after ${s} second`)
+      );
     }, s * 1000);
   });
 };
@@ -12,8 +14,8 @@ export const AJAX = async function (url, uploadData = undefined) {
   try {
     const fetchPro = uploadData
       ? fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(uploadData),
         })
       : fetch(url);
@@ -31,7 +33,7 @@ export const AJAX = async function (url, uploadData = undefined) {
 export const sendFormData = async function (url, formData) {
   try {
     const fetchPro = fetch(url, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     });
 
@@ -52,5 +54,14 @@ export const calculateRemainingDays = (endingDate) => {
     (targetDate - currentDate) / (1000 * 60 * 60 * 24)
   );
 
-  return remainingDays >= 0 ? `${remainingDays} Days Left` : `Deadline Passed`;
+  return remainingDays >= 0
+    ? `${remainingDays} Days Left`
+    : `Deadline Passed`;
 };
+
+export function scrollToTop(smooth = true) {
+  window.scrollTo({
+    top: 0,
+    behavior: smooth ? "smooth" : "auto",
+  });
+}
