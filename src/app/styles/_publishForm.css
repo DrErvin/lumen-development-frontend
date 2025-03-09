@@ -116,7 +116,6 @@
 }
 
 .upload__btn {
-  font-family: 'TeleNeoWeb', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +127,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 600;
   text-transform: uppercase;
   margin: 20px auto 0; /* Centered button */
 }

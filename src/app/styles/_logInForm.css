@@ -100,7 +100,6 @@
 }
 
 .login__btn {
-  font-family: 'TeleNeoWeb', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +150,6 @@
 }
 
 .show__signup__btn {
-  font-family: 'TeleNeoWeb', sans-serif;
   background: none;
   border: none;
   color: var(--color-primary);

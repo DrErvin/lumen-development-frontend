@@ -11,6 +11,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--color-primary-darker);
+  letter-spacing: -0.5px;
 }
 
 .newsletter p {
@@ -27,7 +28,6 @@
 }
 
 .newsletter input {
-  font-family: 'TeleNeoWeb', sans-serif;
   padding: 10px;
   width: 250px;
   border: 1px solid #ccc;
@@ -35,6 +35,8 @@
   margin-right: 10px;
   font-size: 1rem;
   /* flex: 1 1 100%; */
+
+  transition: all 0.3s;
 }
 
 .newsletter input:focus {
@@ -43,15 +45,16 @@
 }
 
 .newsletter button {
-  font-family: 'TeleNeoWeb', sans-serif;
   padding: 10px 20px;
   background-color: var(--color-primary);
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1rem;
+
+  transition: all 0.3s;
 }
 
 .newsletter button:hover {
@@ -66,7 +69,6 @@
 }
 
 .newsletter select {
-  font-family: 'TeleNeoWeb', sans-serif;
   font-size: 1rem;
   width: 100%;
   padding: 10px;
@@ -76,6 +78,8 @@
   /* appearance: none; */
   background-color: white;
   color: #666;
+
+  transition: all 0.3s;
 }
 
 /* .select-field::after {

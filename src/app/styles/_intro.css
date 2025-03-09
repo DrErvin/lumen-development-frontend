@@ -10,7 +10,8 @@
 .intro-title {
   font-size: 2.5rem;
   color: #333;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .intro-text {

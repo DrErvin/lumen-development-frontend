@@ -100,9 +100,8 @@
 }
 
 .card-btn {
-  font-family: 'TeleNeoWeb';
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 10px 20px;
   background-color: var(--color-primary);
   color: white;
@@ -111,6 +110,7 @@
   cursor: pointer;
 
   margin-left: auto;
+  transition: all 0.3s;
 }
 
 .card-btn:hover {

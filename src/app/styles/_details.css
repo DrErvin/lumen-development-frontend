@@ -112,7 +112,6 @@
 } */
 
 .apply-now-btn {
-  font-family: 'TeleNeoWeb';
   font-weight: 700;
   background-color: var(--color-primary);
   color: white;
@@ -222,7 +221,6 @@
 }
 
 #download-pdf-btn {
-  font-family: 'TeleNeoWeb';
   font-weight: 700;
   background-color: var(--color-primary);
   color: white;

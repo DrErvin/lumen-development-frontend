@@ -27,7 +27,6 @@
 }
 
 .btn-admin-search {
-  font-family: 'TeleNeoWeb', sans-serif;
   padding: 10px 20px;
   background-color: var(--color-primary);
   color: var(--color-ternary);

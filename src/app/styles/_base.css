@@ -10,53 +10,17 @@
   --color-secondary-opacity: #ffcd0331;
 }
 
-/* @font-face {
-  font-family: 'TeleNeoWeb';
-  src: url('/fonts/TeleNeoWeb-Regular.woff2') format('woff2'),
-    url('/fonts/TeleNeoWeb-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TeleNeoWeb';
-  src: url('/fonts/TeleNeoWeb-Bold.woff2') format('woff2'),
-    url('/fonts/TeleNeoWeb-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TeleNeoWeb';
-  src: url('/fonts/TeleNeoWeb-ExtraBold.woff2') format('woff2'),
-    url('/fonts/TeleNeoWeb-ExtraBold.woff') format('woff');
-  font-weight: 800; 
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TeleNeoWeb';
-  src: url('/fonts/TeleNeoWeb-Medium.woff2') format('woff2'),
-    url('/fonts/TeleNeoWeb-Medium.woff') format('woff');
-  font-weight: 500; 
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TeleNeoWeb';
-  src: url('/fonts/TeleNeoWeb-Ultra.woff2') format('woff2'),
-    url('/fonts/TeleNeoWeb-Ultra.woff') format('woff');
-  font-weight: 900; 
-  font-style: normal;
-} */
-
 html {
   scroll-behavior: smooth;
 }
 
+* {
+  font-family: var(--font-rubik);
+}
+
 /* Global Styling */
 body {
-  font-family: "TeleNeoWeb", sans-serif;
+  /* font-family: "TeleNeoWeb", sans-serif; */
   line-height: 1.6;
   /* color: #333; */
 }

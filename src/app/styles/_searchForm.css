@@ -33,12 +33,12 @@
 
 .search-inputs input,
 .search-inputs select {
-  font-family: 'TeleNeoWeb', sans-serif;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 400;
+  transition: all 0.3s;
 }
 
 /* Adjust individual field widths */
@@ -91,7 +91,6 @@
 }
 
 .btn-search {
-  font-family: 'TeleNeoWeb', sans-serif;
   padding: 10px 20px;
   background-color: var(--color-primary);
   color: var(--color-ternary);
@@ -99,7 +98,9 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
+
+  transition: all 0.3s;
 }
 
 .btn-search:hover {
