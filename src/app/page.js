@@ -8,6 +8,8 @@ import LoadingSpinner from "../components/LoadingSpinner.js";
 import IntroSection from "../components/IntroSection";
 import FeaturedOpportunities from "../components/FeaturedOpportunities";
 import Pagination from "../components/Pagination.js";
+import LoginModal from "../components/LoginModal.js";
+import SuccessMessage from "../components/SuccessMessage.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 
@@ -27,6 +29,11 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(10); // default value
+
+  // Login states
+  const [user, setUser] = useState(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [success, setSuccess] = useState("");
 
   // Handler function to process search queries
   const handleSearch = async (query) => {
@@ -92,6 +99,19 @@ export default function Home() {
     loadFeatured();
   }, []);
 
+  // Login handler: verifies login credentials using your model
+  const handleLogin = async ({ email, password }) => {
+    const account = await model.verifyLogin({ email, password });
+    if (!account) {
+      throw new Error("Invalid email or password");
+    }
+    // Assume model.state.user is updated after verification.
+    setUser(model.state.user);
+    setSuccess("You have been successfully logged in :)");
+    // Auto-clear success message after 3 seconds
+    setTimeout(() => setSuccess(""), 3000);
+  };
+
   return (
     <main>
       {/* Header Section */}
@@ -130,12 +150,32 @@ export default function Home() {
             <button className="nav__button" id="publishOpportunities">
               Publish Opportunities
             </button>
-            <button className="nav__button" id="logInSignUp">
-              Log In/Sign Up
+            <button
+              className="nav__button"
+              id="logInSignUp"
+              onClick={() => {
+                if (user) {
+                  handleLogout();
+                } else {
+                  setIsLoginModalOpen(true);
+                }
+              }}
+            >
+              {user ? "Log Out" : "Log In/Sign Up"}
             </button>
           </div>
         </nav>
       </header>
+
+      {/* Success Message */}
+      {success && <SuccessMessage text={success} />}
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLogin={handleLogin}
+      />
 
       {/* Intro Section */}
       {/* Search and Featured Opportunities Sections */}
