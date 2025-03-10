@@ -136,6 +136,8 @@
   cursor: pointer;
   color: var(--color-primary);
   text-decoration: none;
+
+  transition: all 0.3s;
 }
 
 .pagination-icon {
@@ -144,6 +146,7 @@
   fill: var(--color-primary);
   margin-bottom: 5px;
   /* Space between icon and text */
+  transition: all 0.3s;
 }
 
 .pagination-btn span {

@@ -7,6 +7,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import LoadingSpinner from "../components/LoadingSpinner.js";
 import IntroSection from "../components/IntroSection";
 import FeaturedOpportunities from "../components/FeaturedOpportunities";
+import Pagination from "../components/Pagination.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 
@@ -22,6 +23,11 @@ export default function Home() {
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [featuredError, setFeaturedError] = useState(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(10); // default value
+
   // Handler function to process search queries
   const handleSearch = async (query) => {
     try {
@@ -33,9 +39,24 @@ export default function Home() {
 
       // Use your model's function to load search results
       await model.loadSearchResults(query);
-      // Get the first page results (or however you want to slice them)
-      const searchResults = model.getSearchResultsPage();
-      setResults(searchResults);
+      const searchState = model.state.search;
+
+      if (
+        searchState &&
+        searchState.results &&
+        searchState.results.length > 0
+      ) {
+        setTotalResults(searchState.results.length);
+        setResultsPerPage(searchState.resultsPerPage);
+        setCurrentPage(1);
+        setResults(model.getSearchResultsPage(1));
+      } else {
+        // No results found: clear results and set total to 0
+        setTotalResults(0);
+        setResultsPerPage(10);
+        setCurrentPage(1);
+        setResults([]);
+      }
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -43,6 +64,13 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Handle pagination clicks: update current page and results
+  const handlePageChange = (page) => {
+    scrollToTop();
+    setCurrentPage(page);
+    setResults(model.getSearchResultsPage(page));
   };
 
   // Load featured opportunities on component mount
@@ -136,25 +164,30 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Optionally render loading, error, or results */}
+        {/* Loading and error messages */}
         {loading && <LoadingSpinner />}
-
-        {/* If we have a global error, show the ErrorMessage component */}
         {error && <ErrorMessage text={error} />}
 
-        {/* Results List Section */}
-        {hasSearched && !loading && !error && (
-          <section className="opportunities-list">
-            <div className="container">
-              <h2>Available Opportunities</h2>
-              {results.length > 0 ? (
+        {/* Results List & Pagination */}
+        {hasSearched &&
+          !loading &&
+          !error &&
+          (results.length > 0 ? (
+            <section className="opportunities-list">
+              <div className="container">
+                <h2>Available Opportunities</h2>
                 <ResultsList results={results} />
-              ) : (
-                <ErrorMessage text="No opportunities found for your query! Please try again." />
-              )}
-            </div>
-          </section>
-        )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalResults={totalResults}
+                  resultsPerPage={resultsPerPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            </section>
+          ) : (
+            <ErrorMessage text="No opportunities found for your query! Please try again." />
+          ))}
 
         {/* Featured Opportunities Section */}
         {!hasSearched && (
@@ -315,9 +348,8 @@ export default function Home() {
       <section id="newsletter-section" className="newsletter">
         <h2>Top Telekom opportunities in your inbox</h2>
         <p>
-          Subscribe to the Telekom Portal newsletter, and we'll send
-          you the latest opportunities in your selected category once
-          a week.
+          Subscribe to the Telekom Portal newsletter to recieve latest
+          opportunities once a week.
         </p>
         <form action="#">
           <div className="select-field">
