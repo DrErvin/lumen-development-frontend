@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
 
 export default function LoginModal({ isOpen, onClose, onLogin }) {
@@ -7,6 +7,8 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [success, setSuccess] = useState("");
 
   if (!isOpen) return null; // Do not render if modal is closed
 
@@ -16,10 +18,16 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     setError(null);
     try {
       await onLogin({ email, password });
-      // On successful login, clear fields and close modal
+      // Instead of closing immediately, show the success message
+      setSuccess("You have been successfully logged in :)");
+      // Clear the input fields
       setEmail("");
       setPassword("");
-      onClose();
+      // After a delay, clear the success and close the modal
+      setTimeout(() => {
+        setSuccess("");
+        onClose();
+      }, 3000);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -29,42 +37,64 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
 
   return (
     <div className="login-modal">
-      {/* The overlay to darken background */}
-      <div className="overlay" onClick={onClose}></div>
-      <div className="login-form-window">
-        <button className="btn--close-modal" onClick={onClose}>
+      {/* Overlay for the modal */}
+      <div className="overlay overlay--login" onClick={onClose}></div>
+      <div className="login-form-window fade-in">
+        <button
+          className="btn--close-modal login-btn--close-modal"
+          onClick={onClose}
+        >
           &times;
         </button>
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="login__column">
-            <h3 className="login__heading">Log In</h3>
-            {error && <ErrorMessage text={error} />}
-            <label htmlFor="loginEmail">Email</label>
-            <input
-              id="loginEmail"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <label htmlFor="loginPassword">Password</label>
-            <input
-              id="loginPassword"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button className="login__btn" type="submit">
-              <svg>
-                <use href="img/icons.svg#icon-login"></use>
-              </svg>
-              {loading ? "Logging in..." : "Log In"}
-            </button>
+        {success ? (
+          // Render success message in place of the form
+          <div className="message">
+            <svg>
+              <use href="img/icons.svg#icon-smile" />
+            </svg>
+            <p>{success}</p>
           </div>
-        </form>
+        ) : loading ? (
+          // If loading, show spinner in the modal area instead of the form.
+          <div className="spinner">
+            <svg>
+              <use href="img/icons.svg#icon-loading" />
+            </svg>
+          </div>
+        ) : (
+          // Render the login form
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="login__column">
+              <h3 className="login__heading">Log In</h3>
+
+              <label htmlFor="loginEmail">Email</label>
+              <input
+                id="loginEmail"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <label htmlFor="loginPassword">Password</label>
+              <input
+                id="loginPassword"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {error && <ErrorMessage text={error} />}
+              <button className="login__btn" type="submit">
+                <svg>
+                  <use href="img/icons.svg#icon-login" />
+                </svg>
+                Log In
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

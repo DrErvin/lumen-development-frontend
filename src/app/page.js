@@ -99,17 +99,26 @@ export default function Home() {
     loadFeatured();
   }, []);
 
+  useEffect(() => {
+    // Check localStorage for a stored user when the component mounts
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   // Login handler: verifies login credentials using your model
   const handleLogin = async ({ email, password }) => {
     const account = await model.verifyLogin({ email, password });
     if (!account) {
       throw new Error("Invalid email or password");
     }
-    // Assume model.state.user is updated after verification.
+    // model.state.user is updated after verification.
+    const loggedInUser = model.state.user;
     setUser(model.state.user);
-    setSuccess("You have been successfully logged in :)");
-    // Auto-clear success message after 3 seconds
-    setTimeout(() => setSuccess(""), 3000);
+
+    // Save the user so that the state persists on reload
+    localStorage.setItem("user", JSON.stringify(loggedInUser));
   };
 
   return (
@@ -166,9 +175,6 @@ export default function Home() {
           </div>
         </nav>
       </header>
-
-      {/* Success Message */}
-      {success && <SuccessMessage text={success} />}
 
       {/* Login Modal */}
       <LoginModal
