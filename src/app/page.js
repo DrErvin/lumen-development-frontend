@@ -9,7 +9,7 @@ import IntroSection from "../components/IntroSection";
 import FeaturedOpportunities from "../components/FeaturedOpportunities";
 import Pagination from "../components/Pagination.js";
 import LoginModal from "../components/LoginModal.js";
-import SuccessMessage from "../components/SuccessMessage.js";
+import LogoutModal from "../components/LogoutModal.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 
@@ -30,10 +30,18 @@ export default function Home() {
   const [totalResults, setTotalResults] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(10); // default value
 
-  // Login states
+  // Login/Logout states
   const [user, setUser] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [success, setSuccess] = useState("");
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  // --- Persistence on mount ---
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   // Handler function to process search queries
   const handleSearch = async (query) => {
@@ -99,15 +107,7 @@ export default function Home() {
     loadFeatured();
   }, []);
 
-  useEffect(() => {
-    // Check localStorage for a stored user when the component mounts
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  // Login handler: verifies login credentials using your model
+  // Login handler
   const handleLogin = async ({ email, password }) => {
     const account = await model.verifyLogin({ email, password });
     if (!account) {
@@ -115,10 +115,18 @@ export default function Home() {
     }
     // model.state.user is updated after verification.
     const loggedInUser = model.state.user;
-    setUser(model.state.user);
+    setUser(loggedInUser);
 
-    // Save the user so that the state persists on reload
+    // Save only one key ("user") in localStorage and remove any extra key.
     localStorage.setItem("user", JSON.stringify(loggedInUser));
+    localStorage.removeItem("loggedInUser");
+  };
+
+  const handleLogout = async () => {
+    // Call your model functions to clear global state and local storage
+    model.clearState();
+    model.clearLocalStorage();
+    setUser(null);
   };
 
   return (
@@ -164,7 +172,8 @@ export default function Home() {
               id="logInSignUp"
               onClick={() => {
                 if (user) {
-                  handleLogout();
+                  // If already logged in, open the logout modal
+                  setIsLogoutModalOpen(true);
                 } else {
                   setIsLoginModalOpen(true);
                 }
@@ -182,6 +191,16 @@ export default function Home() {
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
+
+      {/* Logout Modal */}
+      {isLogoutModalOpen && (
+        <LogoutModal
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onLogout={handleLogout}
+          user={user}
+        />
+      )}
 
       {/* Intro Section */}
       {/* Search and Featured Opportunities Sections */}

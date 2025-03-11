@@ -3,9 +3,9 @@ import {
   API_URL,
   EMPLOYEE_INFO,
   // UNIVERSITY_API_URL,
-} from './config.js';
-import { AJAX, sendFormData } from './helpers.js';
-import { calculateRemainingDays } from './helpers.js';
+} from "./config.js";
+import { AJAX, sendFormData } from "./helpers.js";
+import { calculateRemainingDays } from "./helpers.js";
 
 export const state = {
   opportunity: {},
@@ -23,31 +23,36 @@ const createOpportunityObject = function (data) {
   const opportunity = data[0];
   return {
     id: opportunity.id,
-    type: opportunity.type || 'Unknown Type',
-    fieldOfStudy: opportunity.fieldOfStudy || 'General',
-    title: opportunity.title || 'Untitled Opportunity',
-    company: opportunity.company || 'Deutsche Telekom',
-    location: opportunity.location || 'Not specified',
+    type: opportunity.type || "Unknown Type",
+    fieldOfStudy: opportunity.fieldOfStudy || "General",
+    title: opportunity.title || "Untitled Opportunity",
+    company: opportunity.company || "Deutsche Telekom",
+    location: opportunity.location || "Not specified",
     opportunityDescription:
-      opportunity.description || 'Description not available',
+      opportunity.description || "Description not available",
     yourProfile: opportunity.qualificationsAndRequirements || [],
     tags: opportunity.tags || [],
     experience: opportunity.experienceRequired || [],
-    engagementType: opportunity.engagementType || 'Unknown Engagement Type',
-    workArrangement: opportunity.workArrangement || 'Unknown Work Arrangement',
+    engagementType:
+      opportunity.engagementType || "Unknown Engagement Type",
+    workArrangement:
+      opportunity.workArrangement || "Unknown Work Arrangement",
     deadline:
-      calculateRemainingDays(opportunity.endingDate) || 'No deadline provided',
+      calculateRemainingDays(opportunity.endingDate) ||
+      "No deadline provided",
     benefits: opportunity.benefits || [],
     employeeInfo: opportunity.employeeInfo || EMPLOYEE_INFO,
-    contactPerson: opportunity.contactPerson || 'Not specified',
-    contactPersonEmail: opportunity.contactPersonEmail || 'Not provided',
+    contactPerson: opportunity.contactPerson || "Not specified",
+    contactPersonEmail:
+      opportunity.contactPersonEmail || "Not provided",
   };
 };
 
 const createUserObject = function (account) {
   return {
     id: account.id,
-    accountType: account.id.startsWith('s-') ? 'student' : 'Telekom',
+    accountType: account.id.startsWith("s-") ? "student" : "Telekom",
+    name_and_surname: account.name_and_surname || "",
     // id: user.id,
     // nameAndSurname: user.name_and_surname || '',
     // email: user.email || '',
@@ -66,9 +71,12 @@ export const loadOpportunity = async function (id) {
     // console.log(typeof id);
 
     // Find the opportunity with the specified ID
-    const result = data.find((opportunity) => +opportunity.id === +id);
+    const result = data.find(
+      (opportunity) => +opportunity.id === +id
+    );
     // console.log(result);
-    if (!result) throw new Error(`Opportunity with ID ${id} not found`);
+    if (!result)
+      throw new Error(`Opportunity with ID ${id} not found`);
 
     state.opportunity = createOpportunityObject([result]);
 
@@ -97,7 +105,7 @@ export const loadSearchResults = async function (query) {
     const data = await AJAX(`${API_URL}/opportunities`);
     // If was a real API, we would use something like this
     //  const data = await AJAX(`${API_URL}?${queryString}`);
-    console.log('Check for data in loadSearchResults', data);
+    console.log("Check for data in loadSearchResults", data);
 
     // Filter the data based on the query parameters
     const { location, titleOrKeyword, fieldOfStudy, type } = query;
@@ -119,7 +127,8 @@ export const loadSearchResults = async function (query) {
             opportunity.fieldOfStudy
               .toLowerCase()
               .includes(fieldOfStudy.toLowerCase()))) &&
-        (!type || opportunity.type.toLowerCase().includes(type.toLowerCase()))
+        (!type ||
+          opportunity.type.toLowerCase().includes(type.toLowerCase()))
       );
     });
 
@@ -143,7 +152,9 @@ export const loadSearchResults = async function (query) {
   }
 };
 
-export const getSearchResultsPage = function (page = state.search.page) {
+export const getSearchResultsPage = function (
+  page = state.search.page
+) {
   state.search.page = page;
 
   const start = (page - 1) * state.search.resultsPerPage; // 0
@@ -156,25 +167,27 @@ export const uploadOpportunity = async function (newOpportunity) {
   try {
     // Process tags field into an array
     const tags = newOpportunity.tags
-      ? newOpportunity.tags.split(',').map((tag) => tag.trim())
+      ? newOpportunity.tags.split(",").map((tag) => tag.trim())
       : [];
 
     // Process experienceRequired field into an array
     const experienceRequired = newOpportunity.experienceRequired
-      ? newOpportunity.experienceRequired.split(',').map((exp) => exp.trim())
+      ? newOpportunity.experienceRequired
+          .split(",")
+          .map((exp) => exp.trim())
       : [];
 
     // Process qualificationsAndRequirements into an array
     const qualificationsAndRequirements =
       newOpportunity.qualificationsAndRequirements
         ? newOpportunity.qualificationsAndRequirements
-            .split(';')
+            .split(";")
             .map((req) => req.trim())
         : [];
 
     // Process benefits into an array
     const benefits = newOpportunity.benefits
-      ? newOpportunity.benefits.split(';').map((ben) => ben.trim())
+      ? newOpportunity.benefits.split(";").map((ben) => ben.trim())
       : [];
 
     // Create opportunity object
@@ -201,16 +214,19 @@ export const uploadOpportunity = async function (newOpportunity) {
     // state.opportunity = createOpportunityObject(data);
 
     // Send data to server
-    const response = await AJAX(`${API_URL}/opportunities`, opportunity);
-    console.log('Server Response:', response);
+    const response = await AJAX(
+      `${API_URL}/opportunities`,
+      opportunity
+    );
+    console.log("Server Response:", response);
 
     // Add to global state
     state.opportunity = createOpportunityObject([response.data]);
     // state.opportunity = createOpportunityObject(data);
 
-    console.log('Opportunity Uploaded:', state.opportunity);
+    console.log("Opportunity Uploaded:", state.opportunity);
   } catch (err) {
-    console.error('Error with uploading opportunity:', err);
+    console.error("Error with uploading opportunity:", err);
     throw err;
   }
 };
@@ -222,7 +238,8 @@ export const verifyLogin = async function (data) {
 
     // Find the account with matching email and password
     const account = accounts.find(
-      (acc) => acc.email === data.email && acc.password === data.password
+      (acc) =>
+        acc.email === data.email && acc.password === data.password
     );
 
     // Update the state if the account is valid
@@ -245,17 +262,17 @@ export const verifyLogin = async function (data) {
     // Return the account if found, otherwise return null
     return account || null;
   } catch (err) {
-    console.error('Error with verifiying login:', err);
+    console.error("Error with verifiying login:", err);
     throw err;
   }
 };
 
 const saveUserToLocalStorage = function () {
-  localStorage.setItem('loggedInUser', JSON.stringify(state.user));
+  localStorage.setItem("loggedInUser", JSON.stringify(state.user));
 };
 
 export const loadUserFromLocalStorage = function () {
-  const storedUser = localStorage.getItem('loggedInUser');
+  const storedUser = localStorage.getItem("loggedInUser");
   if (!storedUser) return;
 
   const parsedUser = JSON.parse(storedUser);
@@ -296,7 +313,7 @@ export const getUserDetails = async function () {
     const user = accounts.find((acc) => acc.id === state.user.id);
     return user || null;
   } catch (err) {
-    console.error('Error fetching user details:', err);
+    console.error("Error fetching user details:", err);
     throw err;
   }
 };
@@ -308,9 +325,9 @@ export const clearState = function () {
     // state.user.accountType = null;
     state.user = {};
 
-    console.log('User state cleared.');
+    console.log("User state cleared.");
   } catch (err) {
-    console.error('Error clearing the global state:', err);
+    console.error("Error clearing the global state:", err);
     throw err;
   }
 };
@@ -318,11 +335,12 @@ export const clearState = function () {
 export const clearLocalStorage = function () {
   try {
     // Clear local storage
-    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem("user");
+    localStorage.removeItem("loggedInUser");
 
-    console.log('Local storage cleared.');
+    console.log("Local storage cleared.");
   } catch (err) {
-    console.error('Error clearing local storage:', err);
+    console.error("Error clearing local storage:", err);
     throw err;
   }
 };
@@ -350,10 +368,15 @@ export const preloadUniversityDomains = async function () {
     const universities = await AJAX(`${API_URL}/world-universities`);
 
     // Cache all university domains
-    state.universityDomainsCache = universities.flatMap((uni) => uni.domains);
-    console.log('University domains preloaded:', state.universityDomainsCache);
+    state.universityDomainsCache = universities.flatMap(
+      (uni) => uni.domains
+    );
+    console.log(
+      "University domains preloaded:",
+      state.universityDomainsCache
+    );
   } catch (err) {
-    console.error('Error preloading university domains:', err);
+    console.error("Error preloading university domains:", err);
     throw err;
   }
 };
@@ -364,33 +387,35 @@ export const areUniversitiesCached = function () {
 
 export const validateEmail = async function (email) {
   try {
-    console.log('email to validate: ', email);
+    console.log("email to validate: ", email);
 
     // Ensure email contains an '@' before proceeding
-    if (!email.includes('@')) {
-      console.log('Invalid email format: Missing @ symbol.');
+    if (!email.includes("@")) {
+      console.log("Invalid email format: Missing @ symbol.");
       return false;
     }
 
     // Extract the domain from the email
-    const emailDomain = email.split('@')[1];
+    const emailDomain = email.split("@")[1];
 
     // Normalize the domain by progressively removing subdomains
-    const domainParts = emailDomain.split('.');
+    const domainParts = emailDomain.split(".");
 
     // Check progressively from the full domain to subdomains
     const isValidDomain = domainParts.some((_, index) => {
-      const normalizedDomain = domainParts.slice(index).join('.');
+      const normalizedDomain = domainParts.slice(index).join(".");
       return (
         state.universityDomainsCache.includes(normalizedDomain) ||
-        ['telekom.com'].includes(normalizedDomain)
+        ["telekom.com"].includes(normalizedDomain)
       );
     });
 
-    console.log(isValidDomain ? 'Valid domain found' : 'Invalid domain');
+    console.log(
+      isValidDomain ? "Valid domain found" : "Invalid domain"
+    );
     return isValidDomain; // Return true if a valid domain is found
   } catch (err) {
-    console.error('Error validating email:', err);
+    console.error("Error validating email:", err);
     throw err;
   }
 };
@@ -398,16 +423,16 @@ export const validateEmail = async function (email) {
 export const generateUserInfo = async function (email) {
   try {
     // Extract the domain from the email
-    const emailDomain = email.split('@')[1];
+    const emailDomain = email.split("@")[1];
 
     // Normalize the domain by progressively removing subdomains
-    const domainParts = emailDomain.split('.');
-    const normalizedDomain = domainParts.slice(-2).join('.');
+    const domainParts = emailDomain.split(".");
+    const normalizedDomain = domainParts.slice(-2).join(".");
 
     // Determine if it's a Telekom or university domain
-    const isTelekomDomain = normalizedDomain === 'telekom.com';
-    const idPrefix = isTelekomDomain ? 't-' : 's-';
-    const account_type = isTelekomDomain ? 'Telekom' : 'student';
+    const isTelekomDomain = normalizedDomain === "telekom.com";
+    const idPrefix = isTelekomDomain ? "t-" : "s-";
+    const account_type = isTelekomDomain ? "Telekom" : "student";
 
     // Default user object
     const userInfo = {
@@ -436,7 +461,7 @@ export const generateUserInfo = async function (email) {
 
     return userInfo;
   } catch (err) {
-    console.error('Error generating user info:', err);
+    console.error("Error generating user info:", err);
     throw err;
   }
 };
@@ -455,15 +480,15 @@ export const uploadAccount = async function (newAccount) {
 
     // Upload to the API
     const response = await AJAX(`${API_URL}/accounts`, account);
-    console.log('Account Uploaded:', response);
+    console.log("Account Uploaded:", response);
 
     // Add to global state
     state.user = createUserObject(response.data);
-    console.log('User Added to Global State:', state.user);
+    console.log("User Added to Global State:", state.user);
 
     saveUserToLocalStorage();
   } catch (err) {
-    console.error('Error uploading account:', err);
+    console.error("Error uploading account:", err);
     throw err;
   }
 };
@@ -473,12 +498,15 @@ export const submitApplication = async function (formData) {
     // console.log('Submitting application data:', formData);
 
     // Send FormData to the backend
-    const response = await sendFormData(`${API_URL}/applications`, formData);
+    const response = await sendFormData(
+      `${API_URL}/applications`,
+      formData
+    );
 
-    console.log('Application submitted successfully:', response);
+    console.log("Application submitted successfully:", response);
     return response;
   } catch (err) {
-    console.error('Error submitting application:', err);
+    console.error("Error submitting application:", err);
     throw err;
   }
 };
@@ -507,8 +535,8 @@ export const performSmartSearch = async function (query) {
     // Using of native JS fetch instead of our custom AJAX function
     // due to current configuration of backend server, this is needed
     const res = await fetch(`${API_URL}/smart-search`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
     });
 
@@ -517,7 +545,7 @@ export const performSmartSearch = async function (query) {
 
     return results;
   } catch (err) {
-    console.error('Error performing smart search:', err);
+    console.error("Error performing smart search:", err);
     throw err;
   }
 };
@@ -527,7 +555,7 @@ export const fetchAllOpportunities = async function () {
     const opportunities = await AJAX(`${API_URL}/opportunities`);
     return opportunities;
   } catch (err) {
-    console.error('Error fetching opportunities:', err);
+    console.error("Error fetching opportunities:", err);
     throw err;
   }
 };
@@ -537,7 +565,7 @@ export const fetchAllApplications = async function () {
     const applications = await AJAX(`${API_URL}/applications`);
     return applications;
   } catch (err) {
-    console.error('Error fetching applications:', err);
+    console.error("Error fetching applications:", err);
     throw err;
   }
 };
@@ -555,7 +583,7 @@ export const fetchAllApplicantsData = async function () {
 
     return matchedAccounts; // Return an array of matched account objects
   } catch (err) {
-    console.error('Error fetching applicants data:', err);
+    console.error("Error fetching applicants data:", err);
     throw err;
   }
 };
