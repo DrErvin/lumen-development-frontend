@@ -64,7 +64,7 @@
   color: #666;
   margin-bottom: 10px;
   box-sizing: border-box;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
 .signup-form input:focus,
@@ -107,7 +107,7 @@
   font-size: 1rem;
   color: #666;
   font-style: italic;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .signup__emailError {

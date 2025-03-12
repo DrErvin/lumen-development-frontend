@@ -10,6 +10,7 @@ import FeaturedOpportunities from "../components/FeaturedOpportunities";
 import Pagination from "../components/Pagination.js";
 import LoginModal from "../components/LoginModal.js";
 import LogoutModal from "../components/LogoutModal.js";
+import SignupModal from "../components/SignupModal.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 
@@ -35,9 +36,12 @@ export default function Home() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
+  // Signup modal
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+
   // --- Persistence on mount ---
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -118,8 +122,8 @@ export default function Home() {
     setUser(loggedInUser);
 
     // Save only one key ("user") in localStorage and remove any extra key.
-    localStorage.setItem("user", JSON.stringify(loggedInUser));
-    localStorage.removeItem("loggedInUser");
+    // localStorage.setItem("user", JSON.stringify(loggedInUser));
+    // localStorage.removeItem("loggedInUser");
   };
 
   const handleLogout = async () => {
@@ -127,6 +131,23 @@ export default function Home() {
     model.clearState();
     model.clearLocalStorage();
     setUser(null);
+  };
+
+  useEffect(() => {
+    async function preloadDomains() {
+      if (isSignUpModalOpen && !model.areUniversitiesCached()) {
+        await model.preloadUniversityDomains();
+      }
+    }
+    preloadDomains();
+  }, [isSignUpModalOpen]);
+
+  const handleSignUp = async (newAccount) => {
+    // This calls model.uploadAccount, similar to controlSignup in your controller.js :contentReference[oaicite:1]{index=1}
+    await model.uploadAccount(newAccount);
+    // Optionally update the user state after sign up:
+    const loggedInUser = model.state.user;
+    setUser(loggedInUser);
   };
 
   return (
@@ -190,6 +211,7 @@ export default function Home() {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
+        onShowSignUp={() => setIsSignUpModalOpen(true)}
       />
 
       {/* Logout Modal */}
@@ -199,6 +221,16 @@ export default function Home() {
           onClose={() => setIsLogoutModalOpen(false)}
           onLogout={handleLogout}
           user={user}
+        />
+      )}
+
+      {/* Signup Modal */}
+      {isSignUpModalOpen && (
+        <SignupModal
+          isOpen={isSignUpModalOpen}
+          onClose={() => setIsSignUpModalOpen(false)}
+          onSignUp={handleSignUp}
+          onValidateEmail={model.validateEmail} // Pass the model's validateEmail function
         />
       )}
 

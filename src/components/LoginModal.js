@@ -1,8 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
+import { MODAL_CLOSE_SEC } from "../utils/config";
 
-export default function LoginModal({ isOpen, onClose, onLogin }) {
+export default function LoginModal({
+  isOpen,
+  onClose,
+  onLogin,
+  onShowSignUp,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -19,7 +25,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     try {
       await onLogin({ email, password });
       // Instead of closing immediately, show the success message
-      setSuccess("You have been successfully logged in :)");
+      setSuccess("You have been successfully logged in!");
       // Clear the input fields
       setEmail("");
       setPassword("");
@@ -27,7 +33,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       setTimeout(() => {
         setSuccess("");
         onClose();
-      }, 3000);
+      }, MODAL_CLOSE_SEC * 1000);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -92,6 +98,24 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                 </svg>
                 Log In
               </button>
+            </div>
+
+            <div className="login__footer">
+              <p>
+                Don't have an account?{" "}
+                <button
+                  className="show__signup__btn"
+                  id="openSignUpForm"
+                  type="button"
+                  onClick={() => {
+                    onClose(); // Close the login modal
+                    // Assume you pass an onShowSignUp prop that calls setIsSignUpModalOpen(true)
+                    onShowSignUp();
+                  }}
+                >
+                  Sign Up
+                </button>
+              </p>
             </div>
           </form>
         )}

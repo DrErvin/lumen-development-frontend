@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
+import { MODAL_CLOSE_SEC } from "../utils/config.js";
 
 export default function LogoutModal({
   isOpen,
@@ -20,12 +21,12 @@ export default function LogoutModal({
     setError(null);
     try {
       await onLogout(); // This should clear state, localStorage, etc.
-      setSuccess("You have been logged out :)");
+      setSuccess("You have been logged out!");
       // Clear the success message and close the modal after a delay
       setTimeout(() => {
         setSuccess("");
         onClose();
-      }, 3000);
+      }, MODAL_CLOSE_SEC * 1000);
     } catch (err) {
       setError(err.message);
     } finally {
