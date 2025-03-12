@@ -14,6 +14,8 @@ import SignupModal from "../components/SignupModal.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 
+// kOmentar
+
 export default function Home() {
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState(null);
