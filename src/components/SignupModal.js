@@ -40,7 +40,7 @@ export default function SignupModal({
     // Prevent submission if email domain is invalid
     if (!emailValid) {
       setError(
-        "Invalid email domain. Please use your university or Telekom email."
+        "Invalid email domain. Please use your University or Company email."
       );
       return;
     }

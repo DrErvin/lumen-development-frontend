@@ -11,10 +11,10 @@ import Pagination from "../components/Pagination.js";
 import LoginModal from "../components/LoginModal.js";
 import LogoutModal from "../components/LogoutModal.js";
 import SignupModal from "../components/SignupModal.js";
+import OpportunityDetails from "../components/OpportunityDetails.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
-
-// kOmentar
+import { RES_PER_PAGE } from "../utils/config.js";
 
 export default function Home() {
   const [results, setResults] = useState([]);
@@ -31,7 +31,7 @@ export default function Home() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(10); // default value
+  const [resultsPerPage, setResultsPerPage] = useState(RES_PER_PAGE); // default value
 
   // Login/Logout states
   const [user, setUser] = useState(null);
@@ -41,12 +41,42 @@ export default function Home() {
   // Signup modal
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
+  // Opportunity Details
+  const [selectedOpportunity, setSelectedOpportunity] =
+    useState(null);
+
   // --- Persistence on mount ---
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+  }, []);
+
+  // Listen for hash changes to load opportunity details
+  useEffect(() => {
+    async function handleHashChange() {
+      scrollToTop();
+      const id = window.location.hash.slice(1);
+      if (id) {
+        try {
+          // Scroll up and show spinner if desired
+          // You could set a local loading state here if you wish
+          await model.loadOpportunity(id);
+          // Set the loaded opportunity from global state
+          setSelectedOpportunity(model.state.opportunity);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        setSelectedOpportunity(null);
+      }
+    }
+    window.addEventListener("hashchange", handleHashChange);
+    // Check on mount in case there is already a hash
+    handleHashChange();
+    return () =>
+      window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   // Handler function to process search queries
@@ -236,81 +266,90 @@ export default function Home() {
         />
       )}
 
-      {/* Intro Section */}
-      {/* Search and Featured Opportunities Sections */}
-      <div id="main-content" className="">
-        {/* Main Content with Search Form and Intro Text */}
-        <section className="intro-section">
-          {hasSearched && searchQuery ? (
-            <IntroSection query={searchQuery} />
-          ) : (
-            <div className="container">
-              <h1 className="intro-title">
-                Headstart your career with Deutsche Telekom
-              </h1>
-              <p className="intro-text">
-                Search from thousands of student opportunities in
-                multiple sectors and locations.
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Search Form Section */}
-        <section className="search-section">
-          <div className="container search-container">
-            <SearchForm onSearch={handleSearch} />
-          </div>
-        </section>
-
-        {/* Loading and error messages */}
-        {loading && <LoadingSpinner />}
-        {error && <ErrorMessage text={error} />}
-
-        {/* Results List & Pagination */}
-        {hasSearched &&
-          !loading &&
-          !error &&
-          (results.length > 0 ? (
-            <section className="opportunities-list">
+      {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
+      {selectedOpportunity ? (
+        <OpportunityDetails
+          opportunity={selectedOpportunity}
+          onClose={() => {
+            window.location.hash = "";
+            setSelectedOpportunity(null);
+          }}
+        />
+      ) : (
+        // {/* Main Content */}
+        // {/* Intro Section */}
+        <div id="main-content" className="">
+          <section className="intro-section">
+            {hasSearched && searchQuery ? (
+              <IntroSection query={searchQuery} />
+            ) : (
               <div className="container">
-                <h2>Available Opportunities</h2>
-                <ResultsList results={results} />
-                <Pagination
-                  currentPage={currentPage}
-                  totalResults={totalResults}
-                  resultsPerPage={resultsPerPage}
-                  onPageChange={handlePageChange}
+                <h1 className="intro-title">
+                  Headstart your career with Deutsche Telekom
+                </h1>
+                <p className="intro-text">
+                  Search from thousands of student opportunities in
+                  multiple sectors and locations.
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* Search Form Section */}
+          <section className="search-section">
+            <div className="container search-container">
+              <SearchForm onSearch={handleSearch} />
+            </div>
+          </section>
+
+          {/* Loading and error messages */}
+          {loading && <LoadingSpinner />}
+          {error && <ErrorMessage text={error} />}
+
+          {/* Results List & Pagination */}
+          {hasSearched &&
+            !loading &&
+            !error &&
+            (results.length > 0 ? (
+              <section className="opportunities-list">
+                <div className="container">
+                  <h2>Available Opportunities</h2>
+                  <ResultsList results={results} />
+                  <Pagination
+                    currentPage={currentPage}
+                    totalResults={totalResults}
+                    resultsPerPage={resultsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </section>
+            ) : (
+              <ErrorMessage text="No opportunities found for your query! Please try again." />
+            ))}
+
+          {/* Featured Opportunities Section */}
+          {!hasSearched && (
+            <section
+              id="featured-section"
+              className="featured-opportunity"
+            >
+              <div className="container">
+                <h2>Featured Opportunities</h2>
+                <FeaturedOpportunities
+                  data={featured}
+                  loading={featuredLoading}
+                  error={featuredError}
                 />
               </div>
             </section>
-          ) : (
-            <ErrorMessage text="No opportunities found for your query! Please try again." />
-          ))}
+          )}
 
-        {/* Featured Opportunities Section */}
-        {!hasSearched && (
-          <section
-            id="featured-section"
-            className="featured-opportunity"
-          >
+          {/* Opportunities List Section */}
+          <section className="opportunities-list hidden">
             <div className="container">
-              <h2>Featured Opportunities</h2>
-              <FeaturedOpportunities
-                data={featured}
-                loading={featuredLoading}
-                error={featuredError}
-              />
-            </div>
-          </section>
-        )}
-
-        {/* Opportunities List Section */}
-        <section className="opportunities-list hidden">
-          <div className="container">
-            <h2>Available Opportunities</h2>
-            <div className="container-opp-list">
-              {/*
+              <h2>Available Opportunities</h2>
+              <div className="container-opp-list">
+                {/*
               <div className="opportunity-card">
                 <img src="/src/img/logo2.jpg" alt="Telekom logo" className="card-logo" />
                 <div className="card-info">
@@ -351,9 +390,9 @@ export default function Home() {
                 </a>
               </div>
               */}
-            </div>
-            <div className="pagination">
-              {/*
+              </div>
+              <div className="pagination">
+                {/*
               <button className="pagination-btn pagination__btn--prev">
                 <svg className="pagination-icon">
                   <use href="/src/img/icons.svg#icon-arrow-left" />
@@ -367,19 +406,11 @@ export default function Home() {
                 <span>Page 3</span>
               </button>
               */}
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
-
-      {/* Opportunity Details Section (initially hidden) */}
-      <div id="details-content" className="">
-        <section className="details-opportunity hidden">
-          {/*
-          (Details opportunity section content commented out)
-          */}
-        </section>
-      </div>
+          </section>
+        </div>
+      )}
 
       <div id="admin-content">
         {/*
