@@ -1,13 +1,12 @@
 /* base.css */
 :root {
   --color-primary: #e20074;
-  --color-secondary: hsl(194, 52%, 90%);
+  --color-secondary: #d8edf3;
   --color-ternary: white;
   --color-primary-darker: #c00063;
   --color-primary-darker-hard: #a90057;
-  --color-secondary-darker: #ffbb00;
-  --color-primary-opacity: #5ec5763a;
-  --color-secondary-opacity: #ffcd0331;
+  --color-primary-shade: #f399c7;
+  --color-secondary-tint: #c2d5db;
 }
 
 html {

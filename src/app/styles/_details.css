@@ -1,4 +1,30 @@
 /* Content for Details Opportunity Page */
+.btn--close-details {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+
+  font-weight: 500;
+  background: none;
+  /* background-color: var(--color-primary); */
+  /* color: var(--color-secondary-tint); */
+  color: #bbb;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+
+  transition: all 0.3s;
+}
+
+.btn--close-details:hover {
+  text-decoration: underline;
+}
+
+/* .details-opportunity-container {
+} */
+
 .company-logo {
   width: 50px;
   margin-right: 10px;
@@ -23,6 +49,7 @@
 }
 
 .details-header {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,13 +60,13 @@
   font-size: 2.5rem;
   color: var(--color-primary);
   margin-bottom: 0;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .opportunity-type,
 .opportunity-tags {
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #666;
   margin-bottom: 0;
 }
@@ -47,7 +74,7 @@
 /* Adjust location font and position */
 .opportunity-location {
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: 400;
   color: #666;
   display: flex;
   align-items: center;
@@ -58,12 +85,12 @@
   color: var(--color-primary);
   margin-right: 10px;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .opportunity-tags span {
   color: var(--color-primary);
   margin-right: 10px;
+  font-weight: 500;
 }
 
 /* Job Information Section (Position, Engagement, Deadline, Location) */
@@ -112,7 +139,7 @@
 } */
 
 .apply-now-btn {
-  font-weight: 700;
+  font-weight: 600;
   background-color: var(--color-primary);
   color: white;
   padding: 10px 20px;
@@ -121,6 +148,8 @@
   border: none;
   cursor: pointer;
   text-align: center;
+
+  transition: all 0.3s;
 }
 
 .apply-now-btn:hover {
@@ -221,7 +250,7 @@
 }
 
 #download-pdf-btn {
-  font-weight: 700;
+  font-weight: 600;
   background-color: var(--color-primary);
   color: white;
   padding: 10px 20px;
@@ -229,6 +258,8 @@
   font-size: 1.2rem;
   border: none;
   cursor: pointer;
+
+  transition: all 0.3s;
 }
 
 #download-pdf-btn:hover {

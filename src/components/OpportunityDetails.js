@@ -1,22 +1,30 @@
 // components/OpportunityDetails.js
-export default function OpportunityDetails({ opportunity, onClose }) {
+export default function OpportunityDetails({
+  opportunity,
+  onClose,
+  user,
+  onDownloadPDF,
+  onApply,
+}) {
+  const isTelekom = user && user.accountType === "Telekom";
+
   return (
-    // {/* Opportunity Details Section (initially hidden) */}
-    <div id="details-content" className="">
+    // {/* Opportunity Details Section */}
+    <div id="details-content">
       <section className="details-opportunity">
         <div className="details-opportunity-container">
-          <button
-            className="btn--close-details"
-            onClick={() => {
-              // Clear the hash and call onClose to go back to the main view
-              window.location.hash = "";
-              onClose();
-            }}
-          >
-            &times;
-          </button>
           <div className="container details-container">
             <div className="details-header">
+              <button
+                className="btn--close-details"
+                onClick={() => {
+                  // Clear the hash and call onClose to go back to the main view
+                  window.location.hash = "";
+                  onClose();
+                }}
+              >
+                &larr; Back to Search
+              </button>
               <img
                 src="img/logo.jpg"
                 alt="Company Logo"
@@ -44,6 +52,7 @@ export default function OpportunityDetails({ opportunity, onClose }) {
                   : "No tags"}
               </p>
             </div>
+
             <div className="opportunity-info">
               <div className="opportunity-experience">
                 <svg className="icon-opport-header">
@@ -73,6 +82,27 @@ export default function OpportunityDetails({ opportunity, onClose }) {
                 </p>
               </div>
             </div>
+
+            {/* Role-based button block inserted BEFORE the description section */}
+            <div className="role-based-button">
+              {isTelekom ? (
+                <div className="download-button">
+                  <button
+                    id="download-pdf-btn"
+                    onClick={onDownloadPDF}
+                  >
+                    Download as PDF
+                  </button>
+                </div>
+              ) : (
+                <div className="apply-button">
+                  <button className="apply-now-btn" onClick={onApply}>
+                    Apply Now
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="opportunity-section">
               <h2>Your Tasks (Job Description)</h2>
               <p>
@@ -131,6 +161,26 @@ export default function OpportunityDetails({ opportunity, onClose }) {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Role-based button block inserted AFTER the contact-person section */}
+            <div className="role-based-button">
+              {isTelekom ? (
+                <div className="download-button">
+                  <button
+                    id="download-pdf-btn"
+                    onClick={onDownloadPDF}
+                  >
+                    Download as PDF
+                  </button>
+                </div>
+              ) : (
+                <div className="apply-button">
+                  <button className="apply-now-btn" onClick={onApply}>
+                    Apply Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
