@@ -1,9 +1,11 @@
 // components/OpportunityDetails.js
+import DownloadPDFButton from "./DownloadPDFButton";
+
 export default function OpportunityDetails({
   opportunity,
   onClose,
   user,
-  onDownloadPDF,
+  // onDownloadPDF,
   onApply,
 }) {
   const isTelekom = user && user.accountType === "Telekom";
@@ -86,14 +88,10 @@ export default function OpportunityDetails({
             {/* Role-based button block inserted BEFORE the description section */}
             <div className="role-based-button">
               {isTelekom ? (
-                <div className="download-button">
-                  <button
-                    id="download-pdf-btn"
-                    onClick={onDownloadPDF}
-                  >
-                    Download as PDF
-                  </button>
-                </div>
+                <DownloadPDFButton
+                  opportunity={opportunity}
+                  user={user}
+                />
               ) : (
                 <div className="apply-button">
                   <button className="apply-now-btn" onClick={onApply}>
@@ -166,14 +164,10 @@ export default function OpportunityDetails({
             {/* Role-based button block inserted AFTER the contact-person section */}
             <div className="role-based-button">
               {isTelekom ? (
-                <div className="download-button">
-                  <button
-                    id="download-pdf-btn"
-                    onClick={onDownloadPDF}
-                  >
-                    Download as PDF
-                  </button>
-                </div>
+                <DownloadPDFButton
+                  opportunity={opportunity}
+                  user={user}
+                />
               ) : (
                 <div className="apply-button">
                   <button className="apply-now-btn" onClick={onApply}>

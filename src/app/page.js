@@ -11,6 +11,7 @@ import Pagination from "../components/Pagination.js";
 import LoginModal from "../components/LoginModal.js";
 import LogoutModal from "../components/LogoutModal.js";
 import SignupModal from "../components/SignupModal.js";
+import ApplyModal from "../components/ApplyModal.js";
 import OpportunityDetails from "../components/OpportunityDetails.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
@@ -51,6 +52,9 @@ export default function Home() {
   const [selectedOpportunity, setSelectedOpportunity] =
     useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
+
+  // Apply now modal form
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -214,6 +218,23 @@ export default function Home() {
     setUser(loggedInUser);
   };
 
+  const handleApply = async (formData) => {
+    // Guard clauses
+    if (!user || user.accountType !== "student") {
+      throw new Error("You must be logged in as a student to apply.");
+    }
+
+    if (!selectedOpportunity) {
+      throw new Error("No opportunity selected.");
+    }
+
+    formData.append("userId", user.id);
+    formData.append("opportunityId", selectedOpportunity.id);
+
+    // Submit the application to your backend
+    await model.submitApplication(formData);
+  };
+
   return (
     <>
       {!mounted ? (
@@ -310,6 +331,12 @@ export default function Home() {
             />
           )}
 
+          <ApplyModal
+            isOpen={isApplyModalOpen}
+            onClose={() => setIsApplyModalOpen(false)}
+            onApply={handleApply}
+          />
+
           {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
           {typeof window !== "undefined" && window.location.hash ? (
             detailsLoading || !selectedOpportunity ? (
@@ -322,15 +349,15 @@ export default function Home() {
                   setSelectedOpportunity(null);
                 }}
                 user={user}
-                onDownloadPDF={() => {
-                  // Implement your PDF download logic here.
-                  // For example, you could call a utility function that generates a PDF
-                  console.log("Download as PDF clicked");
-                }}
                 onApply={() => {
-                  // Implement your Apply logic here.
-                  // For example, open an application modal or navigate to an application page
-                  console.log("Apply Now clicked");
+                  if (!user || user.accountType !== "student") {
+                    alert(
+                      "You must be logged in as a student to apply."
+                    );
+                    return;
+                  }
+
+                  setIsApplyModalOpen(true);
                 }}
               />
             )
