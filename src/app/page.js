@@ -13,6 +13,7 @@ import LogoutModal from "../components/LogoutModal.js";
 import SignupModal from "../components/SignupModal.js";
 import ApplyModal from "../components/ApplyModal.js";
 import OpportunityDetails from "../components/OpportunityDetails.js";
+import PublishModal from "../components/PublishModal.js";
 import * as model from "../utils/model";
 import { scrollToTop } from "../utils/helpers";
 import { RES_PER_PAGE } from "../utils/config.js";
@@ -55,6 +56,9 @@ export default function Home() {
 
   // Apply now modal form
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+
+  // Publish Opportunity
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -282,8 +286,18 @@ export default function Home() {
                 <button
                   className="nav__button"
                   id="publishOpportunities"
+                  onClick={() => {
+                    // Only allow if user is logged in as a Telekom user.
+                    if (!user || user.accountType !== "Telekom") {
+                      alert(
+                        "You must be logged in as a Telekom user to publish."
+                      );
+                      return;
+                    }
+                    setIsPublishModalOpen(true);
+                  }}
                 >
-                  Publish Opportunities
+                  Publish Opportunity
                 </button>
                 <button
                   className="nav__button"
@@ -335,6 +349,23 @@ export default function Home() {
             isOpen={isApplyModalOpen}
             onClose={() => setIsApplyModalOpen(false)}
             onApply={handleApply}
+          />
+
+          <PublishModal
+            isOpen={isPublishModalOpen}
+            onClose={() => setIsPublishModalOpen(false)}
+            onPublish={async (data) => {
+              // Call your model function to upload the opportunity.
+              await model.uploadOpportunity(data);
+              // After successful publishing, update the opportunity details view.
+              setSelectedOpportunity(model.state.opportunity);
+              // Update the URL hash (optional)
+              window.history.pushState(
+                null,
+                "",
+                `#${model.state.opportunity.id}`
+              );
+            }}
           />
 
           {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
