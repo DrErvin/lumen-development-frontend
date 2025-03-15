@@ -196,6 +196,7 @@ export const uploadOpportunity = async function (newOpportunity) {
       type: newOpportunity.type,
       fieldOfStudy: newOpportunity.fieldOfStudy,
       title: newOpportunity.title,
+      company: "Company Name",
       location: newOpportunity.location,
       description: newOpportunity.description,
       qualificationsAndRequirements, // Processed field
