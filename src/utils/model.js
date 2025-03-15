@@ -230,7 +230,12 @@ export const uploadOpportunity = async function (newOpportunity) {
     throw err;
   }
 };
-
+export const publishOpportunity = async function (formData) {
+  // Convert the FormData to a plain object
+  const newOpportunity = Object.fromEntries(formData.entries());
+  // Call uploadOpportunity with the newOpportunity object to reuse its logic
+  return await uploadOpportunity(newOpportunity);
+};
 export const verifyLogin = async function (data) {
   try {
     // Fetch all accounts from the API

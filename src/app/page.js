@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import SearchForm from "../components/SearchForm.js";
+import Link from "next/link";
 // Import other components as needed, for example a ResultsList component
 import ResultsList from "../components/ResultsList";
 import ErrorMessage from "../components/ErrorMessage";
@@ -56,6 +57,9 @@ export default function Home() {
   // Apply now modal form
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
+  //Publish opportunity modal form
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+
   // --- Persistence on mount ---
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -63,7 +67,6 @@ export default function Home() {
       setUser(JSON.parse(storedUser));
     }
   }, []);
-
   // Opportunity details
   useEffect(() => {
     async function handleHashChange() {
@@ -113,6 +116,21 @@ export default function Home() {
     return () =>
       window.removeEventListener("hashchange", handleHashChange);
   }, []);
+  // Publish opportunity handler
+  const handlePublishOpportunity = async (e) => {
+    e.preventDefault();
+    if (!user || user.accountType.toLowerCase() !== "telekom") {
+      alert("dddd.");
+      return;
+    }
+    const formData = new FormData(e.target);
+    try {
+      await model.publishOpportunity(formData);
+      setIsPublishModalOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Handler function to process search queries
   const handleSearch = async (query) => {
@@ -218,6 +236,10 @@ export default function Home() {
     setUser(loggedInUser);
   };
 
+  const currentHash =
+  typeof window !== "undefined" ? window.location.hash.slice(1) : "";
+const showOpportunityDetails =
+  currentHash && currentHash !== "featured-section" && currentHash !== "newsletter-section";
   const handleApply = async (formData) => {
     // Guard clauses
     if (!user || user.accountType !== "student") {
@@ -234,11 +256,9 @@ export default function Home() {
     // Submit the application to your backend
     await model.submitApplication(formData);
   };
-
   return (
     <>
       {!mounted ? (
-        // Optionally, you could render a placeholder or spinner here while waiting.
         <LoadingSpinner />
       ) : (
         <main>
@@ -254,13 +274,19 @@ export default function Home() {
               <ul className="nav__links">
                 <li className="nav__item">
                   {/* <button data-section-to-show="home" className="nav__link">Home</button> */}
-                  <a
-                    className="nav__link"
-                    id="homeBtn"
-                    href="index.html"
+                  <Link href="/" 
+                  className="nav__link" 
+                  id="homeBtn"
+                  onClick={() => {
+                    window.location.hash = "";
+                    setHasSearched(false);
+                    setSearchQuery(null);
+                    setResults([]);
+                    setError(null);
+                  }}
                   >
-                    Home
-                  </a>
+                  Home
+                  </Link>
                 </li>
                 <li className="nav__item">
                   <a className="nav__link" id="admin-btn" href="#">
@@ -282,6 +308,13 @@ export default function Home() {
                 <button
                   className="nav__button"
                   id="publishOpportunities"
+                  onClick={() => {
+                    if (!user || user.accountType.toLowerCase() !== "telekom") {
+                      alert("You must be logged in as Deutsche Telekom to publish opportunities.");
+                      return;
+                    }
+                    setIsPublishModalOpen(true);
+                  }}
                 >
                   Publish Opportunities
                 </button>
@@ -338,30 +371,28 @@ export default function Home() {
           />
 
           {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
-          {typeof window !== "undefined" && window.location.hash ? (
-            detailsLoading || !selectedOpportunity ? (
-              <LoadingSpinner />
-            ) : (
-              <OpportunityDetails
-                opportunity={selectedOpportunity}
-                onClose={() => {
-                  window.location.hash = "";
-                  setSelectedOpportunity(null);
-                }}
-                user={user}
-                onApply={() => {
-                  if (!user || user.accountType !== "student") {
-                    alert(
-                      "You must be logged in as a student to apply."
-                    );
-                    return;
-                  }
-
-                  setIsApplyModalOpen(true);
-                }}
-              />
-            )
-          ) : (
+          
+          { showOpportunityDetails ? (
+  detailsLoading || !selectedOpportunity ? (
+    <LoadingSpinner />
+  ) : (
+    <OpportunityDetails
+      opportunity={selectedOpportunity}
+      onClose={() => {
+        window.location.hash = "";
+        setSelectedOpportunity(null);
+      }}
+      user={user}
+      onApply={() => {
+        if (!user || user.accountType !== "student") {
+          alert("You must be logged in as a student to apply.");
+          return;
+        }
+        setIsApplyModalOpen(true);
+      }}
+    />
+  )
+) : (
             // {/* Main Content */}
             // {/* Intro Section */}
             <div id="main-content" className="">
@@ -623,156 +654,156 @@ export default function Home() {
             </div>
           </footer>
 
-          <div className="overlay overlay--publish hidden-oppacity"></div>
-          <div className="publish-opportunity-window hidden-oppacity">
-            <button className="btn--close-modal upload-btn--close-modal">
-              &times;
-            </button>
-            <form className="upload">
-              <div className="upload__column">
-                <h3 className="upload__heading">
-                  Opportunity Details
-                </h3>
-                <label>Type</label>
-                <select required name="type" defaultValue="">
-                  <option value="" disabled>
-                    Select Type
-                  </option>
-                  <option>Job Offer</option>
-                  <option>Internship</option>
-                  <option>Thesis Topic</option>
-                  <option>Mentorship</option>
-                  <option>Extra Curriculum Project</option>
-                </select>
-                <label>Field of Study</label>
-                <select required name="fieldOfStudy" defaultValue="">
-                  <option value="" disabled>
-                    Select Field of Study
-                  </option>
-                  <option>Architecture</option>
-                  <option>Software Engineering</option>
-                  <option>Computer Sciences and Engineering</option>
-                  <option>
-                    Artificial Intelligence and Data Engineering
-                  </option>
-                  <option>Genetics and Bioengineering</option>
-                  <option>
-                    Electrical and Electronics Engineering
-                  </option>
-                  <option>Mechanical Engineering</option>
-                  <option>
-                    Visual Arts and Visual Communications Design
-                  </option>
-                  <option>Media and Communication</option>
-                </select>
-                <label>Title</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="title"
-                  type="text"
-                  placeholder="E.g., Frontend Developer"
-                />
-                <label>Location</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="location"
-                  type="text"
-                  placeholder="E.g., Berlin"
-                />
-                <label>Job Description</label>
-                <textarea
-                  required
-                  name="description"
-                  placeholder="Add a brief description..."
-                  defaultValue="TEST23"
-                ></textarea>
-                <label>Qualifications & Requirements</label>
-                <textarea
-                  required
-                  name="qualificationsAndRequirements"
-                  placeholder="Semicolon-separated qualifications"
-                  defaultValue="TEST23"
-                ></textarea>
-                <label>Benefits</label>
-                <textarea
-                  required
-                  name="benefits"
-                  placeholder="Semicolon-separated benefits"
-                  defaultValue="TEST23"
-                ></textarea>
-              </div>
-
-              <div className="upload__column">
-                <h3 className="upload__heading">
-                  Additional Details
-                </h3>
-                <label>Tags</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="tags"
-                  type="text"
-                  placeholder="Comma-separated, e.g., JavaScript,React"
-                />
-                <label>Engagement Type</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="engagementType"
-                  type="text"
-                  placeholder="E.g., Full-time, Part-time"
-                />
-                <label>Work Arrangement</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="workArrangement"
-                  type="text"
-                  placeholder="E.g., Remote, On-site"
-                />
-                <label>Contact Person </label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="contactPerson"
-                  type="text"
-                  placeholder="E.g., Jane Doe"
-                />
-                <label>
-                  Contact Email{" "}
-                  <span className="note">
-                    This email will be the recipient address for all
-                    applications
-                  </span>
-                </label>
-                <input
-                  defaultValue="TEST23@gmail.com"
-                  required
-                  name="contactPersonEmail"
-                  type="email"
-                  placeholder="E.g., jane.doe@example.com"
-                />
-                <label>Experience Required</label>
-                <input
-                  defaultValue="TEST23"
-                  name="experienceRequired"
-                  type="text"
-                  placeholder="Comma-separated, e.g., Junior, Senior"
-                />
-                <label>Deadline</label>
-                <input required name="endingDate" type="date" />
-              </div>
-
-              <button className="btn upload__btn" type="submit">
-                <svg>
-                  <use href="/img/icons.svg#icon-upload-cloud" />
-                </svg>
-                <span>Publish Opportunity</span>
-              </button>
-            </form>
-          </div>
+          {isPublishModalOpen && (
+  <>
+    {/* Optional: Overlay  */}
+    <div
+      className="overlay overlay--publish"
+      onClick={() => setIsPublishModalOpen(false)}
+    ></div>
+    <div className="publish-opportunity-window">
+      <button
+        className="btn--close-modal upload-btn--close-modal"
+        onClick={() => setIsPublishModalOpen(false)}
+      >
+        &times;
+      </button>
+      <form className="upload" onSubmit={handlePublishOpportunity}>
+        <div className="upload__column">
+          <h3 className="upload__heading">Opportunity Details</h3>
+          <label>Type</label>
+          <select required name="type" defaultValue="">
+            <option value="" disabled>
+              Select Type
+            </option>
+            <option>Job Offer</option>
+            <option>Internship</option>
+            <option>Thesis Topic</option>
+            <option>Mentorship</option>
+            <option>Extra Curriculum Project</option>
+          </select>
+          <label>Field of Study</label>
+          <select required name="fieldOfStudy" defaultValue="">
+            <option value="" disabled>
+              Select Field of Study
+            </option>
+            <option>Architecture</option>
+            <option>Software Engineering</option>
+            <option>Computer Sciences and Engineering</option>
+            <option>Artificial Intelligence and Data Engineering</option>
+            <option>Genetics and Bioengineering</option>
+            <option>Electrical and Electronics Engineering</option>
+            <option>Mechanical Engineering</option>
+            <option>Visual Arts and Visual Communications Design</option>
+            <option>Media and Communication</option>
+          </select>
+          <label>Title</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="title"
+            type="text"
+            placeholder="E.g., Frontend Developer"
+          />
+          <label>Location</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="location"
+            type="text"
+            placeholder="E.g., Berlin"
+          />
+          <label>Job Description</label>
+          <textarea
+            required
+            name="description"
+            placeholder="Add a brief description..."
+            defaultValue="TEST23"
+          ></textarea>
+          <label>Qualifications & Requirements</label>
+          <textarea
+            required
+            name="qualificationsAndRequirements"
+            placeholder="Semicolon-separated qualifications"
+            defaultValue="TEST23"
+          ></textarea>
+          <label>Benefits</label>
+          <textarea
+            required
+            name="benefits"
+            placeholder="Semicolon-separated benefits"
+            defaultValue="TEST23"
+          ></textarea>
+        </div>
+  
+        <div className="upload__column">
+          <h3 className="upload__heading">Additional Details</h3>
+          <label>Tags</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="tags"
+            type="text"
+            placeholder="Comma-separated, e.g., JavaScript,React"
+          />
+          <label>Engagement Type</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="engagementType"
+            type="text"
+            placeholder="E.g., Full-time, Part-time"
+          />
+          <label>Work Arrangement</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="workArrangement"
+            type="text"
+            placeholder="E.g., Remote, On-site"
+          />
+          <label>Contact Person</label>
+          <input
+            defaultValue="TEST23"
+            required
+            name="contactPerson"
+            type="text"
+            placeholder="E.g., Jane Doe"
+          />
+          <label>
+            Contact Email{" "}
+            <span className="note">
+              This email will be the recipient address for all applications
+            </span>
+          </label>
+          <input
+            defaultValue="TEST23@gmail.com"
+            required
+            name="contactPersonEmail"
+            type="email"
+            placeholder="E.g., jane.doe@example.com"
+          />
+          <label>Experience Required</label>
+          <input
+            defaultValue="TEST23"
+            name="experienceRequired"
+            type="text"
+            placeholder="Comma-separated, e.g., Junior, Senior"
+          />
+          <label>Deadline</label>
+          <input required name="endingDate" type="date" />
+        </div>
+  
+        <button className="btn upload__btn" type="submit">
+          <svg>
+            <use href="/img/icons.svg#icon-upload-cloud" />
+          </svg>
+          <span>Publish Opportunity</span>
+        </button>
+      </form>
+    </div>
+  </>
+)}
 
           <div className="overlay overlay--login hidden-oppacity"></div>
           <div className="login-form-window hidden-oppacity">
