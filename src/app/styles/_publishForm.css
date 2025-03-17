@@ -84,7 +84,7 @@
 
 .publish-opportunity-window label {
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 500;
   color: var(--color-primary);
   margin-bottom: 5px;
 }
@@ -100,7 +100,7 @@
   color: #666;
   margin-bottom: 10px; /* Space between inputs */
   box-sizing: border-box; /* Ensure padding fits within the width */
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
 .publish-opportunity-window textarea {
@@ -130,6 +130,8 @@
   font-weight: 600;
   text-transform: uppercase;
   margin: 20px auto 0; /* Centered button */
+
+  transition: all 0.3s;
 }
 
 .upload__btn:hover {
