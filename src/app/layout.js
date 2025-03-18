@@ -1,5 +1,8 @@
 import { Rubik } from "next/font/google";
 import "./styles/main.css"; // Import your main.css here
+import "./globals.css";
+import "./styles/main.css";
+
 
 const rubik = Rubik({
   // weight: ["400", "700"], // Specify weights you need

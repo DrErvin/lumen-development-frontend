@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import SearchForm from "../components/SearchForm.js";
 // Import other components as needed, for example a ResultsList component
+import Link from "next/link.js";
 import ResultsList from "../components/ResultsList";
 import ErrorMessage from "../components/ErrorMessage";
 import LoadingSpinner from "../components/LoadingSpinner.js";
@@ -24,7 +25,10 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  //Modal states
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  // Search results states
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -53,9 +57,15 @@ export default function Home() {
   const [selectedOpportunity, setSelectedOpportunity] =
     useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
-
-  // Apply now modal form
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  // Theme state for light/dark mode
+  const [theme, setTheme] = useState("light");
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", theme === "dark");
+    console.log("HTML classList:", document.documentElement.classList.value);
+  }, [theme]);
+  const toggleTheme = () => {
+    setTheme(prev => (prev === "light" ? "dark" : "light"));
+  };
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -302,6 +312,39 @@ const showOpportunityDetails =
                 </li>
               </ul>
               <div className="nav__buttons">
+                           {/* Theme toggle button */}
+  <button
+    className="nav__button theme-toggle"
+    onClick={toggleTheme}
+    aria-label="Toggle theme"
+  >
+    {theme === "light" ? (
+      // Moon icon: display when in light mode (click to go dark)
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+      </svg>
+    ) : (
+      // Sun icon: display when in dark mode (click to go light)
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle
+          cx="12"
+          cy="12"
+          r="5"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <path
+          d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M17.36 17.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M17.36 6.64l1.42-1.42"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+      </svg>
+    )}
+  </button>
                 <button
                   className="nav__button"
                   id="publishOpportunities"
