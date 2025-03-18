@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 import SearchForm from "../components/SearchForm.js";
 // Import other components as needed, for example a ResultsList component
 import Link from "next/link.js";
@@ -62,13 +63,20 @@ export default function Home() {
   const [detailsLoading, setDetailsLoading] = useState(false);
   // Theme state for light/dark mode
   const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    setTheme(prev => prev === "light" ? "dark" : "light");
+  };
+  useEffect(() => {
+    // Load saved theme preference on mount
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+  }, []);
+  
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", theme === "dark");
-    console.log("HTML classList:", document.documentElement.classList.value);
+    console.log("Theme changed to:", theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
-  const toggleTheme = () => {
-    setTheme(prev => (prev === "light" ? "dark" : "light"));
-  };
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -296,39 +304,19 @@ const showOpportunityDetails =
                 </li>
               </ul>
               <div className="nav__buttons">
-                           {/* Theme toggle button */}
-                <button
-                  className="nav__button theme-toggle"
-                  onClick={toggleTheme}
-                  aria-label="Toggle theme"
-                >
-                  {theme === "light" ? (
-                    // Moon icon: display when in light mode (click to go dark)
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  ) : (
-                    // Sun icon: display when in dark mode (click to go light)
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="5"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M17.36 17.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M17.36 6.64l1.42-1.42"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  )}
-                  </button>
+                    <button
+                      className="nav__button theme-toggle"
+                      onClick={toggleTheme}
+                      aria-label="Toggle theme"
+                    >
+                      {theme === "light" ? (
+                        // Moon icon: display when in light mode (click to go dark)
+                        <Moon size={24} />
+                      ) : (
+                        // Sun icon: display when in dark mode (click to go light)
+                        <Sun size={24} />
+                      )}
+                    </button>
                   {user && user.accountType.toLowerCase() === "telekom" && (
                   <button
                       className="nav__button"

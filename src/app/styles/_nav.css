@@ -60,6 +60,40 @@
   transition: all 0.3s;
 }
 
+.nav__button.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;   /* fixed dimensions matching other buttons, adjust as needed */
+  height: 40px;  
+  border: none !important;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;  /* Remove extra margins */
+  font-size: 1.2rem;
+  line-height: 1;  /* help avoid extra spacing */
+  box-shadow: none !important;
+}
+
+.nav__button.theme-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+.nav__button.theme-toggle svg,
+.nav__button.theme-toggle svg * {
+  stroke: none;
+  fill: currentColor; /* or set it to your desired color */
+}
+
+
+
+.nav__buttons {
+  display: flex;
+  align-items: center; /* Vertical centering */
+  justify-content: flex-end; /* or space-between, if needed */
+  gap: 10px;
+}
+
 #publishOpportunities {
   background-color: var(--color-primary);
   color: var(--color-ternary);
@@ -154,17 +188,21 @@
   }
 
   .nav__buttons {
-    flex-direction: column;
-    gap: 5px;
-    max-width: 200px;
-    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;  /* or center, as you prefer */
+    gap: 10px;
+    max-width: 100%;
+    width: auto;
     align-items: center;
   }
 
-  .nav__button {
-    width: 80%; /* Buttons take up most of the width on smaller screens */
-    padding: 0.5rem;
+  .nav__button,
+  .nav__button.theme-toggle {
+    width: auto !important;
+    padding: 0.5rem 1rem;
     font-size: 0.85rem;
+    /* Remove any extra margin that might affect height */
+    margin-left: 0 !important;
   }
 }
 
@@ -187,13 +225,17 @@
   }
 
   .nav__buttons {
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+  }
+  .nav__button,
+  .nav__button.theme-toggle {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    width: auto !important;
+    margin-left: 0 !important;  /* remove extra margin for theme-toggle */
   }
 
-  .nav__button {
-    font-size: 0.8rem;
-    padding: 0.4rem;
-    width: 80%;
-  }
 }
