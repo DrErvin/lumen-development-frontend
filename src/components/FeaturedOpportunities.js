@@ -30,17 +30,22 @@ export default function FeaturedOpportunities({data, loading, error}) {
             {opportunity.location || "Location not specified"}
           </p>
           <a
-            href={`#${opportunity.id}`}
-            className="view-opportunity-btn"
-            onClick={(e) => {
-              e.preventDefault();
-              if (window.location.hash.slice(1) === opportunity.id) {
-                window.dispatchEvent(new HashChangeEvent("hashchange"));
-              }
-            }}
-          >
-            View Opportunity
-          </a>
+  href={`#${opportunity.id}`}
+  className="view-opportunity-btn"
+  onClick={(e) => {
+    // Only prevent default if the hash is already set
+    if (window.location.hash.slice(1) === opportunity.id) {
+      e.preventDefault();
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    } else {
+      // Allow default navigation to occur by not preventing it
+      // Optionally, you could also manually set the new hash:
+      window.location.hash = opportunity.id;
+    }
+  }}
+>
+  View Opportunity
+</a>
         </motion.div>
       ))}
     </div>

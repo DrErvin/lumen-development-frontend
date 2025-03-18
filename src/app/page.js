@@ -25,8 +25,11 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
-  //Modal states
+  // Publish modal state
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const openPublishModal = () => setIsPublishModalOpen(true);
+  const closePublishModal = () => setIsPublishModalOpen(false);
+  // Apply modal state
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   // Search results states
   const [results, setResults] = useState([]);
@@ -117,28 +120,9 @@ export default function Home() {
         localStorage.removeItem("opportunity");
       }
     }
-    window.addEventListener("hashchange", handleHashChange);
-    // Check on mount in case there is already a hash
-    handleHashChange();
-    return () =>
-      window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-  // Publish opportunity handler
-  const handlePublishOpportunity = async (e) => {
-    e.preventDefault();
-    if (!user || user.accountType.toLowerCase() !== "telekom") {
-      alert("dddd.");
-      return;
-    }
-    const formData = new FormData(e.target);
-    try {
-      await model.publishOpportunity(formData);
-      setIsPublishModalOpen(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+      window.addEventListener("hashchange", handleHashChange);
+      return () => window.removeEventListener("hashchange", handleHashChange);
+    }, []);
   // Handler function to process search queries
   const handleSearch = async (query) => {
     try {
@@ -313,44 +297,53 @@ const showOpportunityDetails =
               </ul>
               <div className="nav__buttons">
                            {/* Theme toggle button */}
-  <button
-    className="nav__button theme-toggle"
-    onClick={toggleTheme}
-    aria-label="Toggle theme"
-  >
-    {theme === "light" ? (
-      // Moon icon: display when in light mode (click to go dark)
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-      </svg>
-    ) : (
-      // Sun icon: display when in dark mode (click to go light)
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle
-          cx="12"
-          cy="12"
-          r="5"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-        <path
-          d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M17.36 17.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M17.36 6.64l1.42-1.42"
-          stroke="currentColor"
-          strokeWidth="2"
-        />
-      </svg>
-    )}
-  </button>
                 <button
-                  className="nav__button"
-                  id="publishOpportunities"
+                  className="nav__button theme-toggle"
+                  onClick={toggleTheme}
+                  aria-label="Toggle theme"
                 >
-                  Publish Opportunities
-                </button>
+                  {theme === "light" ? (
+                    // Moon icon: display when in light mode (click to go dark)
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                  ) : (
+                    // Sun icon: display when in dark mode (click to go light)
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M17.36 17.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M17.36 6.64l1.42-1.42"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                  )}
+                  </button>
+                  {user && user.accountType.toLowerCase() === "telekom" && (
+                  <button
+                      className="nav__button"
+                      id="publishOpportunities"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // Clear any unwanted hash if present
+                        if (window.location.hash === "#publish") {
+                          window.history.replaceState(null, "", window.location.pathname);
+                        }
+                        openPublishModal();
+                      }}
+                    >
+                      Publish Opportunities
+                    </button> )}
                 <button
                   className="nav__button"
                   id="logInSignUp"
@@ -402,47 +395,40 @@ const showOpportunityDetails =
             onClose={() => setIsApplyModalOpen(false)}
             onApply={handleApply}
           />
-
-          <PublishModal
-            isOpen={isPublishModalOpen}
-            onClose={() => setIsPublishModalOpen(false)}
-            onPublish={async (data) => {
-              // Call your model function to upload the opportunity.
-              await model.uploadOpportunity(data);
-              // After successful publishing, update the opportunity details view.
-              setSelectedOpportunity(model.state.opportunity);
-              // Update the URL hash (optional)
-              window.history.pushState(
-                null,
-                "",
-                `#${model.state.opportunity.id}`
-              );
-            }}
-          />
-
-          {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
-          
-          { showOpportunityDetails ? (
-  detailsLoading || !selectedOpportunity ? (
-    <LoadingSpinner />
-  ) : (
-    <OpportunityDetails
-      opportunity={selectedOpportunity}
-      onClose={() => {
-        window.location.hash = "";
-        setSelectedOpportunity(null);
-      }}
-      user={user}
-      onApply={() => {
-        if (!user || user.accountType !== "student") {
-          alert("You must be logged in as a student to apply.");
-          return;
-        }
-        setIsApplyModalOpen(true);
-      }}
-    />
-  )
-) : (
+                                {isPublishModalOpen && (
+                        <PublishModal
+                          isOpen={isPublishModalOpen}
+                          onClose={closePublishModal}
+                          onPublish={async (data) => {
+                            await model.uploadOpportunity(data);
+                            setSelectedOpportunity(model.state.opportunity);
+                            window.history.pushState(null, "", `#${model.state.opportunity.id}`);
+                          }}
+                        />
+                      )}
+                  {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
+                  
+                  { showOpportunityDetails ? (
+          detailsLoading || !selectedOpportunity ? (
+            <LoadingSpinner />
+          ) : (
+            <OpportunityDetails
+              opportunity={selectedOpportunity}
+              onClose={() => {
+                window.location.hash = "";
+                setSelectedOpportunity(null);
+              }}
+              user={user}
+              onApply={() => {
+                if (!user || user.accountType !== "student") {
+                  alert("You must be logged in as a student to apply.");
+                  return;
+                }
+                setIsApplyModalOpen(true);
+              }}
+            />
+          )
+          ) : (
             // {/* Main Content */}
             // {/* Intro Section */}
             <div id="main-content" className="">
@@ -584,327 +570,6 @@ const showOpportunityDetails =
               </p>
             </div>
           </footer>
-
-          <div className="overlay overlay--publish hidden-oppacity"></div>
-          <div className="publish-opportunity-window hidden-oppacity">
-            <button className="btn--close-modal upload-btn--close-modal">
-              &times;
-            </button>
-            <form className="upload">
-              <div className="upload__column">
-                <h3 className="upload__heading">
-                  Opportunity Details
-                </h3>
-                <label>Type</label>
-                <select required name="type" defaultValue="">
-                  <option value="" disabled>
-                    Select Type
-                  </option>
-                  <option>Job Offer</option>
-                  <option>Internship</option>
-                  <option>Thesis Topic</option>
-                  <option>Mentorship</option>
-                  <option>Extra Curriculum Project</option>
-                </select>
-                <label>Field of Study</label>
-                <select required name="fieldOfStudy" defaultValue="">
-                  <option value="" disabled>
-                    Select Field of Study
-                  </option>
-                  <option>Architecture</option>
-                  <option>Software Engineering</option>
-                  <option>Computer Sciences and Engineering</option>
-                  <option>
-                    Artificial Intelligence and Data Engineering
-                  </option>
-                  <option>Genetics and Bioengineering</option>
-                  <option>
-                    Electrical and Electronics Engineering
-                  </option>
-                  <option>Mechanical Engineering</option>
-                  <option>
-                    Visual Arts and Visual Communications Design
-                  </option>
-                  <option>Media and Communication</option>
-                </select>
-                <label>Title</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="title"
-                  type="text"
-                  placeholder="E.g., Frontend Developer"
-                />
-                <label>Location</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="location"
-                  type="text"
-                  placeholder="E.g., Berlin"
-                />
-                <label>Job Description</label>
-                <textarea
-                  required
-                  name="description"
-                  placeholder="Add a brief description..."
-                  defaultValue="TEST23"
-                ></textarea>
-                <label>Qualifications & Requirements</label>
-                <textarea
-                  required
-                  name="qualificationsAndRequirements"
-                  placeholder="Semicolon-separated qualifications"
-                  defaultValue="TEST23"
-                ></textarea>
-                <label>Benefits</label>
-                <textarea
-                  required
-                  name="benefits"
-                  placeholder="Semicolon-separated benefits"
-                  defaultValue="TEST23"
-                ></textarea>
-              </div>
-
-              <div className="upload__column">
-                <h3 className="upload__heading">
-                  Additional Details
-                </h3>
-                <label>Tags</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="tags"
-                  type="text"
-                  placeholder="Comma-separated, e.g., JavaScript,React"
-                />
-                <label>Engagement Type</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="engagementType"
-                  type="text"
-                  placeholder="E.g., Full-time, Part-time"
-                />
-                <label>Work Arrangement</label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="workArrangement"
-                  type="text"
-                  placeholder="E.g., Remote, On-site"
-                />
-                <label>Contact Person </label>
-                <input
-                  defaultValue="TEST23"
-                  required
-                  name="contactPerson"
-                  type="text"
-                  placeholder="E.g., Jane Doe"
-                />
-                <label>
-                  Contact Email{" "}
-                  <span className="note">
-                    This email will be the recipient address for all
-                    applications
-                  </span>
-                </label>
-                <input
-                  defaultValue="TEST23@gmail.com"
-                  required
-                  name="contactPersonEmail"
-                  type="email"
-                  placeholder="E.g., jane.doe@example.com"
-                />
-                <label>Experience Required</label>
-                <input
-                  defaultValue="TEST23"
-                  name="experienceRequired"
-                  type="text"
-                  placeholder="Comma-separated, e.g., Junior, Senior"
-                />
-                <label>Deadline</label>
-                <input required name="endingDate" type="date" />
-              </div>
-
-              <button className="btn upload__btn" type="submit">
-                <svg>
-                  <use href="/img/icons.svg#icon-upload-cloud" />
-                </svg>
-                <span>Publish Opportunity</span>
-              </button>
-            </form>
-          </div>
-
-          <div className="overlay overlay--login hidden-oppacity"></div>
-          <div className="login-form-window hidden-oppacity">
-            <button className="btn--close-modal login-btn--close-modal">
-              &times;
-            </button>
-            <form className="login-form">
-              <div className="login__column">
-                <h3 className="login__heading">Log In</h3>
-                <label htmlFor="loginEmail">Email</label>
-                <input
-                  id="loginEmail"
-                  required
-                  type="email"
-                  placeholder="Enter your email"
-                />
-                <label htmlFor="loginPassword">Password</label>
-                <input
-                  id="loginPassword"
-                  required
-                  type="password"
-                  placeholder="Enter your password"
-                />
-                <button className="login__btn" type="submit">
-                  <svg>
-                    <use href="/img/icons.svg#icon-login" />
-                  </svg>
-                  <span>Log In</span>
-                </button>
-              </div>
-              <div className="login__footer">
-                {/* <p>Don't have an account? <a href="#" id="signUpLink">Sign Up</a></p> */}
-                <p>
-                  Don't have an account?{" "}
-                  <button
-                    className="show__signup__btn"
-                    id="openSignUpForm"
-                    type="button"
-                  >
-                    Sign Up
-                  </button>
-                </p>
-              </div>
-            </form>
-          </div>
-
-          <div className="overlay overlay--logout hidden-oppacity"></div>
-          <div className="logout-form-window hidden-oppacity">
-            <button className="btn--close-modal logout-btn--close-modal">
-              &times;
-            </button>
-            <form className="logout-form">
-              <div className="logout__column">
-                <h3 className="logout__heading">Log Out</h3>
-                <p className="logout__message">
-                  You are currently logged in as{" "}
-                  <span id="logoutUserName">Name Surname</span>. Do
-                  you want to log out?
-                </p>
-                <button className="btn logout__btn" type="submit">
-                  <svg>
-                    <use href="/img/icons.svg#icon-logout" />
-                  </svg>
-                  <span>Log Out</span>
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div className="overlay overlay--signup hidden-oppacity"></div>
-          <div className="signup-form-window hidden-oppacity">
-            <button className="btn--close-modal signup-btn--close-modal">
-              &times;
-            </button>
-            <form className="signup-form">
-              <div className="signup__column">
-                <h3 className="signup__heading">Sign Up</h3>
-                <div className="disclaimer">
-                  <p>
-                    We use your data to enhance your user journey on
-                    our platform by simplifying the application
-                    process.
-                  </p>
-                </div>
-                {/* <label htmlFor="user-type">User Type</label>
-            <select id="user-type" required>
-              <option defaultValue="" disabled>Select User Type</option>
-              <option>Student</option>
-              <option>Deutsche Telekom</option>
-            </select> */}
-                <label htmlFor="name">Name and Surname</label>
-                <input
-                  id="name"
-                  name="nameAndSurname"
-                  required
-                  type="text"
-                  placeholder="Enter your name and surname"
-                />
-                <label htmlFor="signUpEmail">
-                  Email{" "}
-                  <span className="note">
-                    please use your university or company email
-                    address
-                  </span>
-                </label>
-                <input
-                  id="signUpEmail"
-                  name="email"
-                  required
-                  type="email"
-                  placeholder="Enter your email"
-                />
-                <p className="signup__emailError hidden">
-                  *Invalid email domain. Please use your university or
-                  Telekom email.
-                </p>
-                <label htmlFor="signUpPassword">Password</label>
-                <input
-                  id="signUpPassword"
-                  name="password"
-                  required
-                  type="password"
-                  placeholder="Enter your password"
-                />
-                <button className="btn signup__btn" type="submit">
-                  <svg>
-                    <use href="/img/icons.svg#icon-signup" />
-                  </svg>
-                  <span>Sign Up</span>
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div className="overlay overlay--apply hidden-oppacity"></div>
-          <div className="apply-form-window hidden-oppacity">
-            <button className="btn--close-modal apply-btn--close-modal">
-              &times;
-            </button>
-            <form className="apply-form">
-              <div className="apply__column">
-                <h3 className="apply__heading">Apply Now</h3>
-                <div className="disclaimer">
-                  <p>
-                    Your information is auto-generated based on your
-                    email. After applying, you will receive a
-                    confirmation email with your details.
-                  </p>
-                </div>
-                <label htmlFor="cvUpload">
-                  Upload Your CV (optional)
-                </label>
-                <input
-                  id="cvUpload"
-                  name="cvUpload"
-                  type="file"
-                  accept=".pdf, .doc, .docx"
-                />
-                <p className="apply__note">
-                  *Only PDF, DOC, and DOCX files are accepted.
-                </p>
-                <button className="btn apply__btn" type="submit">
-                  <svg>
-                    <use href="/img/icons.svg#icon-apply" />
-                  </svg>
-                  <span>Apply</span>
-                </button>
-              </div>
-            </form>
-          </div>
         </main>
       )}
     </>
