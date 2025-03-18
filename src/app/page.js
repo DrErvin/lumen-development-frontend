@@ -222,7 +222,7 @@ export default function Home() {
   const handleSignUp = async (newAccount) => {
     // This calls model.uploadAccount, similar to controlSignup in your controller.js :contentReference[oaicite:1]{index=1}
     await model.uploadAccount(newAccount);
-    // Optionally update the user state after sign up:
+    
     const loggedInUser = model.state.user;
     setUser(loggedInUser);
   };
