@@ -491,9 +491,9 @@ export default function Home() {
 
           {/* Newsletter Subscription Section */}
           <section id="newsletter-section" className="newsletter">
-            <h2>Top Telekom opportunities in your inbox</h2>
+            <h2>Top job opportunities in your inbox</h2>
             <p>
-              Subscribe to the Telekom Portal newsletter to recieve latest
+              Subscribe to the Job Portal newsletter to recieve latest
               opportunities once a week.
             </p>
             <form action="#">
@@ -531,11 +531,13 @@ export default function Home() {
                     Hospitality and Tourism Management
                   </option>
                   <option value="Medical Care">Medical Care</option>
+
                   <option value="Economics and Business Administration">
                     Economics and Business Administration
                   </option>
-                  <option value="Media and Communication">
-                    Media and Communication
+
+                  <option value="Law and Legal Studies">
+                    Law and Legal Studies
                   </option>
                 </select>
               </div>
@@ -551,10 +553,7 @@ export default function Home() {
           {/* Footer Section */}
           <footer className="main-footer">
             <div className="container">
-              <p>
-                &copy; 2025 Deutsche Telekom Student Platfrom. All Rights
-                Reserved.
-              </p>
+              <p>&copy; 2025 Job-Student Platfrom. All Rights Reserved.</p>
             </div>
           </footer>
 
@@ -607,6 +606,7 @@ export default function Home() {
                       <option>Hospitality and Tourism Management</option>
                       <option>Medical Care</option>
                       <option>Economics and Business Administration</option>
+                      <option>Law and Legal Studies</option>
                     </select>
                     <label>Title</label>
                     <input

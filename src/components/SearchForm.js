@@ -57,6 +57,7 @@ export default function SearchForm({ onSearch }) {
           <option>Hospitality and Tourism Management</option>
           <option>Medical Care</option>
           <option>Economics and Business Administration</option>
+          <option>Law and Legal Studies</option>
         </select>
         <select
           name="type"

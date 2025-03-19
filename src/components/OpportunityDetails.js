@@ -35,9 +35,7 @@ export default function OpportunityDetails({
               <h1 className="opportunity-title">
                 {opportunity.title || "Untitled Opportunity"}
               </h1>
-              <p className="opportunity-type">
-                {opportunity.type || "N/A"}
-              </p>
+              <p className="opportunity-type">{opportunity.type || "N/A"}</p>
               <p className="opportunity-location">
                 <svg className="icon-opport-header">
                   <use href="img/icons.svg#icon-location-marker" />
@@ -61,8 +59,7 @@ export default function OpportunityDetails({
                   <use href="img/icons.svg#icon-experience" />
                 </svg>
                 <p>
-                  <strong>Experience:</strong>{" "}
-                  {opportunity.experience || "N/A"}
+                  <strong>Experience:</strong> {opportunity.experience || "N/A"}
                 </p>
               </div>
               <div className="opportunity-engagement">
@@ -79,8 +76,7 @@ export default function OpportunityDetails({
                   <use href="img/icons.svg#icon-deadline" />
                 </svg>
                 <p>
-                  <strong>Deadline:</strong>{" "}
-                  {opportunity.deadline || "N/A"}
+                  <strong>Deadline:</strong> {opportunity.deadline || "N/A"}
                 </p>
               </div>
             </div>
@@ -88,10 +84,7 @@ export default function OpportunityDetails({
             {/* Role-based button block inserted BEFORE the description section */}
             <div className="role-based-button">
               {isTelekom ? (
-                <DownloadPDFButton
-                  opportunity={opportunity}
-                  user={user}
-                />
+                <DownloadPDFButton opportunity={opportunity} user={user} />
               ) : (
                 <div className="apply-button">
                   <button className="apply-now-btn" onClick={onApply}>
@@ -111,8 +104,7 @@ export default function OpportunityDetails({
             <div className="opportunity-section">
               <h2>Your Profile (Qualifications & Requirements)</h2>
               <ul>
-                {opportunity.yourProfile &&
-                opportunity.yourProfile.length > 0
+                {opportunity.yourProfile && opportunity.yourProfile.length > 0
                   ? opportunity.yourProfile.map((req, i) => (
                       <li key={i}>{req}</li>
                     ))
@@ -122,16 +114,13 @@ export default function OpportunityDetails({
             <div className="opportunity-section">
               <h2>What We Offer</h2>
               <ul>
-                {opportunity.benefits &&
-                opportunity.benefits.length > 0
-                  ? opportunity.benefits.map((ben, i) => (
-                      <li key={i}>{ben}</li>
-                    ))
+                {opportunity.benefits && opportunity.benefits.length > 0
+                  ? opportunity.benefits.map((ben, i) => <li key={i}>{ben}</li>)
                   : null}
               </ul>
             </div>
             <div className="opportunity-section">
-              <h2>About Telekom DE</h2>
+              <h2>About The Company</h2>
               <p>{opportunity.employeeInfo}</p>
             </div>
             <div className="contact-person-section">
@@ -144,16 +133,11 @@ export default function OpportunityDetails({
                 />
                 <div className="contact-person-info">
                   <p>
-                    <strong>Name:</strong>{" "}
-                    {opportunity.contactPerson || "N/A"}
+                    <strong>Name:</strong> {opportunity.contactPerson || "N/A"}
                   </p>
                   <p>
                     <strong>Email:</strong>{" "}
-                    <a
-                      href={`mailto:${
-                        opportunity.contactPersonEmail || ""
-                      }`}
-                    >
+                    <a href={`mailto:${opportunity.contactPersonEmail || ""}`}>
                       {opportunity.contactPersonEmail || "N/A"}
                     </a>
                   </p>
@@ -164,10 +148,7 @@ export default function OpportunityDetails({
             {/* Role-based button block inserted AFTER the contact-person section */}
             <div className="role-based-button">
               {isTelekom ? (
-                <DownloadPDFButton
-                  opportunity={opportunity}
-                  user={user}
-                />
+                <DownloadPDFButton opportunity={opportunity} user={user} />
               ) : (
                 <div className="apply-button">
                   <button className="apply-now-btn" onClick={onApply}>
