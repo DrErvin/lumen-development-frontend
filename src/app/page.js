@@ -50,8 +50,7 @@ export default function Home() {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   // Opportunity Details
-  const [selectedOpportunity, setSelectedOpportunity] =
-    useState(null);
+  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
 
   // Apply now modal form
@@ -86,8 +85,7 @@ export default function Home() {
       if (id) {
         setDetailsLoading(true);
         try {
-          const storedOpportunity =
-            localStorage.getItem("opportunity");
+          const storedOpportunity = localStorage.getItem("opportunity");
           if (storedOpportunity) {
             setSelectedOpportunity(JSON.parse(storedOpportunity));
           }
@@ -113,8 +111,7 @@ export default function Home() {
     window.addEventListener("hashchange", handleHashChange);
     // Check on mount in case there is already a hash
     handleHashChange();
-    return () =>
-      window.removeEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
   // Publish opportunity handler
   const handlePublishOpportunity = async (e) => {
@@ -237,9 +234,11 @@ export default function Home() {
   };
 
   const currentHash =
-  typeof window !== "undefined" ? window.location.hash.slice(1) : "";
-const showOpportunityDetails =
-  currentHash && currentHash !== "featured-section" && currentHash !== "newsletter-section";
+    typeof window !== "undefined" ? window.location.hash.slice(1) : "";
+  const showOpportunityDetails =
+    currentHash &&
+    currentHash !== "featured-section" &&
+    currentHash !== "newsletter-section";
   const handleApply = async (formData) => {
     // Guard clauses
     if (!user || user.accountType !== "student") {
@@ -274,18 +273,19 @@ const showOpportunityDetails =
               <ul className="nav__links">
                 <li className="nav__item">
                   {/* <button data-section-to-show="home" className="nav__link">Home</button> */}
-                  <Link href="/" 
-                  className="nav__link" 
-                  id="homeBtn"
-                  onClick={() => {
-                    window.location.hash = "";
-                    setHasSearched(false);
-                    setSearchQuery(null);
-                    setResults([]);
-                    setError(null);
-                  }}
+                  <Link
+                    href="/"
+                    className="nav__link"
+                    id="homeBtn"
+                    onClick={() => {
+                      window.location.hash = "";
+                      setHasSearched(false);
+                      setSearchQuery(null);
+                      setResults([]);
+                      setError(null);
+                    }}
                   >
-                  Home
+                    Home
                   </Link>
                 </li>
                 <li className="nav__item">
@@ -310,7 +310,9 @@ const showOpportunityDetails =
                   id="publishOpportunities"
                   onClick={() => {
                     if (!user || user.accountType.toLowerCase() !== "telekom") {
-                      alert("You must be logged in as Deutsche Telekom to publish opportunities.");
+                      alert(
+                        "You must be logged in as Deutsche Telekom to publish opportunities."
+                      );
                       return;
                     }
                     setIsPublishModalOpen(true);
@@ -371,28 +373,28 @@ const showOpportunityDetails =
           />
 
           {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
-          
-          { showOpportunityDetails ? (
-  detailsLoading || !selectedOpportunity ? (
-    <LoadingSpinner />
-  ) : (
-    <OpportunityDetails
-      opportunity={selectedOpportunity}
-      onClose={() => {
-        window.location.hash = "";
-        setSelectedOpportunity(null);
-      }}
-      user={user}
-      onApply={() => {
-        if (!user || user.accountType !== "student") {
-          alert("You must be logged in as a student to apply.");
-          return;
-        }
-        setIsApplyModalOpen(true);
-      }}
-    />
-  )
-) : (
+
+          {showOpportunityDetails ? (
+            detailsLoading || !selectedOpportunity ? (
+              <LoadingSpinner />
+            ) : (
+              <OpportunityDetails
+                opportunity={selectedOpportunity}
+                onClose={() => {
+                  window.location.hash = "";
+                  setSelectedOpportunity(null);
+                }}
+                user={user}
+                onApply={() => {
+                  if (!user || user.accountType !== "student") {
+                    alert("You must be logged in as a student to apply.");
+                    return;
+                  }
+                  setIsApplyModalOpen(true);
+                }}
+              />
+            )
+          ) : (
             // {/* Main Content */}
             // {/* Intro Section */}
             <div id="main-content" className="">
@@ -405,8 +407,8 @@ const showOpportunityDetails =
                       Headstart your career with Deutsche Telekom
                     </h1>
                     <p className="intro-text">
-                      Search from thousands of student opportunities
-                      in multiple sectors and locations.
+                      Search from thousands of student opportunities in multiple
+                      sectors and locations.
                     </p>
                   </div>
                 )}
@@ -446,10 +448,7 @@ const showOpportunityDetails =
 
               {/* Featured Opportunities Section */}
               {!hasSearched && (
-                <section
-                  id="featured-section"
-                  className="featured-opportunity"
-                >
+                <section id="featured-section" className="featured-opportunity">
                   <div className="container">
                     <h2>Featured Opportunities</h2>
                     <FeaturedOpportunities
@@ -595,16 +594,12 @@ const showOpportunityDetails =
           <section id="newsletter-section" className="newsletter">
             <h2>Top Telekom opportunities in your inbox</h2>
             <p>
-              Subscribe to the Telekom Portal newsletter to recieve
-              latest opportunities once a week.
+              Subscribe to the Telekom Portal newsletter to recieve latest
+              opportunities once a week.
             </p>
             <form action="#">
               <div className="select-field">
-                <select
-                  name="field-of-interest"
-                  required
-                  defaultValue=""
-                >
+                <select name="field-of-interest" required defaultValue="">
                   <option value="" disabled>
                     Choose a field...
                   </option>
@@ -633,6 +628,16 @@ const showOpportunityDetails =
                   <option value="Media and Communication">
                     Media and Communication
                   </option>
+                  <option value="Hospitality and Tourism Management">
+                    Hospitality and Tourism Management
+                  </option>
+                  <option value="Medical Care">Medical Care</option>
+                  <option value="Economics and Business Administration">
+                    Economics and Business Administration
+                  </option>
+                  <option value="Media and Communication">
+                    Media and Communication
+                  </option>
                 </select>
               </div>
               <input
@@ -648,162 +653,170 @@ const showOpportunityDetails =
           <footer className="main-footer">
             <div className="container">
               <p>
-                &copy; 2025 Deutsche Telekom Student Platfrom. All
-                Rights Reserved.
+                &copy; 2025 Deutsche Telekom Student Platfrom. All Rights
+                Reserved.
               </p>
             </div>
           </footer>
 
           {isPublishModalOpen && (
-  <>
-    {/* Optional: Overlay  */}
-    <div
-      className="overlay overlay--publish"
-      onClick={() => setIsPublishModalOpen(false)}
-    ></div>
-    <div className="publish-opportunity-window">
-      <button
-        className="btn--close-modal upload-btn--close-modal"
-        onClick={() => setIsPublishModalOpen(false)}
-      >
-        &times;
-      </button>
-      <form className="upload" onSubmit={handlePublishOpportunity}>
-        <div className="upload__column">
-          <h3 className="upload__heading">Opportunity Details</h3>
-          <label>Type</label>
-          <select required name="type" defaultValue="">
-            <option value="" disabled>
-              Select Type
-            </option>
-            <option>Job Offer</option>
-            <option>Internship</option>
-            <option>Thesis Topic</option>
-            <option>Mentorship</option>
-            <option>Extra Curriculum Project</option>
-          </select>
-          <label>Field of Study</label>
-          <select required name="fieldOfStudy" defaultValue="">
-            <option value="" disabled>
-              Select Field of Study
-            </option>
-            <option>Architecture</option>
-            <option>Software Engineering</option>
-            <option>Computer Sciences and Engineering</option>
-            <option>Artificial Intelligence and Data Engineering</option>
-            <option>Genetics and Bioengineering</option>
-            <option>Electrical and Electronics Engineering</option>
-            <option>Mechanical Engineering</option>
-            <option>Visual Arts and Visual Communications Design</option>
-            <option>Media and Communication</option>
-          </select>
-          <label>Title</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="title"
-            type="text"
-            placeholder="E.g., Frontend Developer"
-          />
-          <label>Location</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="location"
-            type="text"
-            placeholder="E.g., Berlin"
-          />
-          <label>Job Description</label>
-          <textarea
-            required
-            name="description"
-            placeholder="Add a brief description..."
-            defaultValue="TEST23"
-          ></textarea>
-          <label>Qualifications & Requirements</label>
-          <textarea
-            required
-            name="qualificationsAndRequirements"
-            placeholder="Semicolon-separated qualifications"
-            defaultValue="TEST23"
-          ></textarea>
-          <label>Benefits</label>
-          <textarea
-            required
-            name="benefits"
-            placeholder="Semicolon-separated benefits"
-            defaultValue="TEST23"
-          ></textarea>
-        </div>
-  
-        <div className="upload__column">
-          <h3 className="upload__heading">Additional Details</h3>
-          <label>Tags</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="tags"
-            type="text"
-            placeholder="Comma-separated, e.g., JavaScript,React"
-          />
-          <label>Engagement Type</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="engagementType"
-            type="text"
-            placeholder="E.g., Full-time, Part-time"
-          />
-          <label>Work Arrangement</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="workArrangement"
-            type="text"
-            placeholder="E.g., Remote, On-site"
-          />
-          <label>Contact Person</label>
-          <input
-            defaultValue="TEST23"
-            required
-            name="contactPerson"
-            type="text"
-            placeholder="E.g., Jane Doe"
-          />
-          <label>
-            Contact Email{" "}
-            <span className="note">
-              This email will be the recipient address for all applications
-            </span>
-          </label>
-          <input
-            defaultValue="TEST23@gmail.com"
-            required
-            name="contactPersonEmail"
-            type="email"
-            placeholder="E.g., jane.doe@example.com"
-          />
-          <label>Experience Required</label>
-          <input
-            defaultValue="TEST23"
-            name="experienceRequired"
-            type="text"
-            placeholder="Comma-separated, e.g., Junior, Senior"
-          />
-          <label>Deadline</label>
-          <input required name="endingDate" type="date" />
-        </div>
-  
-        <button className="btn upload__btn" type="submit">
-          <svg>
-            <use href="/img/icons.svg#icon-upload-cloud" />
-          </svg>
-          <span>Publish Opportunity</span>
-        </button>
-      </form>
-    </div>
-  </>
-)}
+            <>
+              {/* Optional: Overlay  */}
+              <div
+                className="overlay overlay--publish"
+                onClick={() => setIsPublishModalOpen(false)}
+              ></div>
+              <div className="publish-opportunity-window">
+                <button
+                  className="btn--close-modal upload-btn--close-modal"
+                  onClick={() => setIsPublishModalOpen(false)}
+                >
+                  &times;
+                </button>
+                <form className="upload" onSubmit={handlePublishOpportunity}>
+                  <div className="upload__column">
+                    <h3 className="upload__heading">Opportunity Details</h3>
+                    <label>Type</label>
+                    <select required name="type" defaultValue="">
+                      <option value="" disabled>
+                        Select Type
+                      </option>
+                      <option>Job Offer</option>
+                      <option>Internship</option>
+                      <option>Thesis Topic</option>
+                      <option>Mentorship</option>
+                      <option>Extra Curriculum Project</option>
+                    </select>
+                    <label>Field of Study</label>
+                    <select required name="fieldOfStudy" defaultValue="">
+                      <option value="" disabled>
+                        Select Field of Study
+                      </option>
+                      <option>Architecture</option>
+                      <option>Software Engineering</option>
+                      <option>Computer Sciences and Engineering</option>
+                      <option>
+                        Artificial Intelligence and Data Engineering
+                      </option>
+                      <option>Genetics and Bioengineering</option>
+                      <option>Electrical and Electronics Engineering</option>
+                      <option>Mechanical Engineering</option>
+                      <option>
+                        Visual Arts and Visual Communications Design
+                      </option>
+                      <option>Media and Communication</option>
+                      <option>Hospitality and Tourism Management</option>
+                      <option>Medical Care</option>
+                      <option>Economics and Business Administration</option>
+                    </select>
+                    <label>Title</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="title"
+                      type="text"
+                      placeholder="E.g., Frontend Developer"
+                    />
+                    <label>Location</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="location"
+                      type="text"
+                      placeholder="E.g., Berlin"
+                    />
+                    <label>Job Description</label>
+                    <textarea
+                      required
+                      name="description"
+                      placeholder="Add a brief description..."
+                      defaultValue="TEST23"
+                    ></textarea>
+                    <label>Qualifications & Requirements</label>
+                    <textarea
+                      required
+                      name="qualificationsAndRequirements"
+                      placeholder="Semicolon-separated qualifications"
+                      defaultValue="TEST23"
+                    ></textarea>
+                    <label>Benefits</label>
+                    <textarea
+                      required
+                      name="benefits"
+                      placeholder="Semicolon-separated benefits"
+                      defaultValue="TEST23"
+                    ></textarea>
+                  </div>
+
+                  <div className="upload__column">
+                    <h3 className="upload__heading">Additional Details</h3>
+                    <label>Tags</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="tags"
+                      type="text"
+                      placeholder="Comma-separated, e.g., JavaScript,React"
+                    />
+                    <label>Engagement Type</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="engagementType"
+                      type="text"
+                      placeholder="E.g., Full-time, Part-time"
+                    />
+                    <label>Work Arrangement</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="workArrangement"
+                      type="text"
+                      placeholder="E.g., Remote, On-site"
+                    />
+                    <label>Contact Person</label>
+                    <input
+                      defaultValue="TEST23"
+                      required
+                      name="contactPerson"
+                      type="text"
+                      placeholder="E.g., Jane Doe"
+                    />
+                    <label>
+                      Contact Email{" "}
+                      <span className="note">
+                        This email will be the recipient address for all
+                        applications
+                      </span>
+                    </label>
+                    <input
+                      defaultValue="TEST23@gmail.com"
+                      required
+                      name="contactPersonEmail"
+                      type="email"
+                      placeholder="E.g., jane.doe@example.com"
+                    />
+                    <label>Experience Required</label>
+                    <input
+                      defaultValue="TEST23"
+                      name="experienceRequired"
+                      type="text"
+                      placeholder="Comma-separated, e.g., Junior, Senior"
+                    />
+                    <label>Deadline</label>
+                    <input required name="endingDate" type="date" />
+                  </div>
+
+                  <button className="btn upload__btn" type="submit">
+                    <svg>
+                      <use href="/img/icons.svg#icon-upload-cloud" />
+                    </svg>
+                    <span>Publish Opportunity</span>
+                  </button>
+                </form>
+              </div>
+            </>
+          )}
 
           <div className="overlay overlay--login hidden-oppacity"></div>
           <div className="login-form-window hidden-oppacity">
@@ -860,8 +873,8 @@ const showOpportunityDetails =
                 <h3 className="logout__heading">Log Out</h3>
                 <p className="logout__message">
                   You are currently logged in as{" "}
-                  <span id="logoutUserName">Name Surname</span>. Do
-                  you want to log out?
+                  <span id="logoutUserName">Name Surname</span>. Do you want to
+                  log out?
                 </p>
                 <button className="btn logout__btn" type="submit">
                   <svg>
@@ -883,9 +896,8 @@ const showOpportunityDetails =
                 <h3 className="signup__heading">Sign Up</h3>
                 <div className="disclaimer">
                   <p>
-                    We use your data to enhance your user journey on
-                    our platform by simplifying the application
-                    process.
+                    We use your data to enhance your user journey on our
+                    platform by simplifying the application process.
                   </p>
                 </div>
                 {/* <label htmlFor="user-type">User Type</label>
@@ -905,8 +917,7 @@ const showOpportunityDetails =
                 <label htmlFor="signUpEmail">
                   Email{" "}
                   <span className="note">
-                    please use your university or company email
-                    address
+                    please use your university or company email address
                   </span>
                 </label>
                 <input
@@ -917,8 +928,8 @@ const showOpportunityDetails =
                   placeholder="Enter your email"
                 />
                 <p className="signup__emailError hidden">
-                  *Invalid email domain. Please use your university or
-                  Telekom email.
+                  *Invalid email domain. Please use your university or Telekom
+                  email.
                 </p>
                 <label htmlFor="signUpPassword">Password</label>
                 <input
@@ -948,14 +959,12 @@ const showOpportunityDetails =
                 <h3 className="apply__heading">Apply Now</h3>
                 <div className="disclaimer">
                   <p>
-                    Your information is auto-generated based on your
-                    email. After applying, you will receive a
-                    confirmation email with your details.
+                    Your information is auto-generated based on your email.
+                    After applying, you will receive a confirmation email with
+                    your details.
                   </p>
                 </div>
-                <label htmlFor="cvUpload">
-                  Upload Your CV (optional)
-                </label>
+                <label htmlFor="cvUpload">Upload Your CV (optional)</label>
                 <input
                   id="cvUpload"
                   name="cvUpload"

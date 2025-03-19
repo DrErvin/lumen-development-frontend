@@ -48,16 +48,15 @@ export default function SearchForm({ onSearch }) {
           <option>Architecture</option>
           <option>Software Engineering</option>
           <option>Computer Sciences and Engineering</option>
-          <option>
-            Artificial Intelligence and Data Engineering
-          </option>
+          <option>Artificial Intelligence and Data Engineering</option>
           <option>Genetics and Bioengineering</option>
           <option>Electrical and Electronics Engineering</option>
           <option>Mechanical Engineering</option>
-          <option>
-            Visual Arts and Visual Communications Design
-          </option>
+          <option>Visual Arts and Visual Communications Design</option>
           <option>Media and Communication</option>
+          <option>Hospitality and Tourism Management</option>
+          <option>Medical Care</option>
+          <option>Economics and Business Administration</option>
         </select>
         <select
           name="type"
