@@ -26,7 +26,7 @@ const createOpportunityObject = function (data) {
     type: opportunity.type || "Unknown Type",
     fieldOfStudy: opportunity.fieldOfStudy || "General",
     title: opportunity.title || "Untitled Opportunity",
-    company: opportunity.company || "Deutsche Telekom",
+    company: opportunity.company || "Copmany Name",
     location: opportunity.location || "Not specified",
     opportunityDescription:
       opportunity.description || "Description not available",
@@ -51,7 +51,7 @@ const createOpportunityObject = function (data) {
 const createUserObject = function (account) {
   return {
     id: account.id,
-    accountType: account.id.startsWith("s-") ? "student" : "Telekom",
+    accountType: account.id.startsWith("s-") ? "student" : "company",
     name_and_surname: account.name_and_surname || "",
     // id: user.id,
     // nameAndSurname: user.name_and_surname || '',
@@ -250,16 +250,6 @@ export const verifyLogin = async function (data) {
       saveUserToLocalStorage();
     }
 
-    // // Update the state if the account is valid
-    // if (account) {
-    //   state.user.id = account.id;
-    //   state.user.accountType = account.id.startsWith('s-')
-    //     ? 'student'
-    //     : 'Telekom';
-
-    //   saveUserToLocalStorage();
-    // }
-
     // Return the account if found, otherwise return null
     return account || null;
   } catch (err) {
@@ -407,7 +397,7 @@ export const validateEmail = async function (email) {
       const normalizedDomain = domainParts.slice(index).join(".");
       return (
         state.universityDomainsCache.includes(normalizedDomain) ||
-        ["telekom.com"].includes(normalizedDomain)
+        ["company.com"].includes(normalizedDomain)
       );
     });
 
@@ -430,10 +420,10 @@ export const generateUserInfo = async function (email) {
     const domainParts = emailDomain.split(".");
     const normalizedDomain = domainParts.slice(-2).join(".");
 
-    // Determine if it's a Telekom or university domain
-    const isTelekomDomain = normalizedDomain === "telekom.com";
-    const idPrefix = isTelekomDomain ? "t-" : "s-";
-    const account_type = isTelekomDomain ? "Telekom" : "student";
+    // Determine if it's a Company or university domain
+    const isCompanyDomain = normalizedDomain === "company.com";
+    const idPrefix = isCompanyDomain ? "c-" : "s-";
+    const account_type = isCompanyDomain ? "company" : "student";
 
     // Default user object
     const userInfo = {
@@ -444,10 +434,10 @@ export const generateUserInfo = async function (email) {
       university_location: null,
     };
 
-    if (isTelekomDomain) return userInfo;
+    if (isCompanyDomain) return userInfo;
 
     // Fetch university details only if it's a university domain
-    // if (!isTelekomDomain) {
+    // if (!isCompanyDomain) {
     const universities = await AJAX(`${API_URL}/world-universities`);
     const university = universities.find((uni) =>
       uni.domains.some((domain) => emailDomain.endsWith(domain))
