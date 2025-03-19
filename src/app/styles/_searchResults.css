@@ -106,18 +106,17 @@
   font-size: 1.1rem;
   font-weight: 600;
   padding: 10px 20px;
-  background-color: var(--color-primary);
-  color: white;
+  background-color: #ff66aa !important;  /* fixed pink color */
+  color: white!important;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-
   margin-left: auto;
   transition: all 0.3s;
 }
 
 .card-btn:hover {
-  background-color: var(--color-primary-darker);
+  background-color: #ff85c1 !important;
 }
 
 .pagination {

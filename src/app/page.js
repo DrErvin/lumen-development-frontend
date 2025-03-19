@@ -1,21 +1,23 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 import SearchForm from "../components/SearchForm.js";
-import Link from "next/link";
 // Import other components as needed, for example a ResultsList component
+import Link from "next/link.js";
 import ResultsList from "../components/ResultsList";
 import ErrorMessage from "../components/ErrorMessage";
 import LoadingSpinner from "../components/LoadingSpinner.js";
-import IntroSection from "../components/IntroSection";
-import FeaturedOpportunities from "../components/FeaturedOpportunities";
+import IntroSection from "../components/IntroSection.js";
+import FeaturedOpportunities from "../components/FeaturedOpportunities.js";
 import Pagination from "../components/Pagination.js";
 import LoginModal from "../components/LoginModal.js";
 import LogoutModal from "../components/LogoutModal.js";
 import SignupModal from "../components/SignupModal.js";
 import ApplyModal from "../components/ApplyModal.js";
 import OpportunityDetails from "../components/OpportunityDetails.js";
-import * as model from "../utils/model";
-import { scrollToTop } from "../utils/helpers";
+import PublishModal from "../components/PublishModal.js";
+import * as model from "../utils/model.js";
+import { scrollToTop } from "../utils/helpers.js";
 import { RES_PER_PAGE } from "../utils/config.js";
 
 export default function Home() {
@@ -24,7 +26,13 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  // Publish modal state
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const openPublishModal = () => setIsPublishModalOpen(true);
+  const closePublishModal = () => setIsPublishModalOpen(false);
+  // Apply modal state
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  // Search results states
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,12 +60,22 @@ export default function Home() {
   // Opportunity Details
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
+  // Theme state for light/dark mode
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+  useEffect(() => {
+    // Load saved theme preference on mount
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
 
-  // Apply now modal form
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-
-  //Publish opportunity modal form
-  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", theme === "dark");
+    console.log("Theme changed to:", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -228,7 +246,7 @@ export default function Home() {
   const handleSignUp = async (newAccount) => {
     // This calls model.uploadAccount, similar to controlSignup in your controller.js :contentReference[oaicite:1]{index=1}
     await model.uploadAccount(newAccount);
-    // Optionally update the user state after sign up:
+
     const loggedInUser = model.state.user;
     setUser(loggedInUser);
   };
@@ -464,131 +482,12 @@ export default function Home() {
               <section className="opportunities-list hidden">
                 <div className="container">
                   <h2>Available Opportunities</h2>
-                  <div className="container-opp-list">
-                    {/*
-              <div className="opportunity-card">
-                <img src="/src/img/logo2.jpg" alt="Telekom logo" className="card-logo" />
-                <div className="card-info">
-                  <h3 className="card-type">Job Offer</h3>
-                  <h2 className="card-title">Frontend Developer</h2>
-                </div>
-                <div className="card-details">
-                  <div className="card-detail-item">
-                    <div className="card-detail-label">
-                      <svg className="card-icon">
-                        <use href="/src/img/icons.svg#icon-location-marker" />
-                      </svg>
-                      <span>Location</span>
-                    </div>
-                    <p>Sarajevo, Mostar</p>
-                  </div>
-                  <div className="card-detail-item">
-                    <div className="card-detail-label">
-                      <svg className="card-icon">
-                        <use href="/src/img/icons.svg#icon-experience" />
-                      </svg>
-                      <span>Experience</span>
-                    </div>
-                    <p>Senior</p>
-                  </div>
-                  <div className="card-detail-item last-item">
-                    <div className="card-detail-label">
-                      <svg className="card-icon">
-                        <use href="/src/img/icons.svg#icon-deadline" />
-                      </svg>
-                      <span>Deadline</span>
-                    </div>
-                    <p>28 days left</p>
-                  </div>
-                </div>
-                <a href="#" className="card-link">
-                  <button className="card-btn">View Opportunity</button>
-                </a>
-              </div>
-              */}
-                  </div>
-                  <div className="pagination">
-                    {/*
-              <button className="pagination-btn pagination__btn--prev">
-                <svg className="pagination-icon">
-                  <use href="/src/img/icons.svg#icon-arrow-left" />
-                </svg>
-                <span>Page 1</span>
-              </button>
-              <button className="pagination-btn pagination__btn--next">
-                <svg className="pagination-icon">
-                  <use href="/src/img/icons.svg#icon-arrow-right" />
-                </svg>
-                <span>Page 3</span>
-              </button>
-              */}
-                  </div>
+                  <div className="container-opp-list"></div>
+                  <div className="pagination"></div>
                 </div>
               </section>
             </div>
           )}
-
-          <div id="admin-content">
-            {/*
-        <section className="admin-section hidden">
-          <h1>Admin Dashboard</h1>
-          <form className="admin-search-form">
-            <div className="admin-search-inputs">
-              <input type="text" placeholder="Search applications..." name="search" required />
-              <button type="submit" className="btn-admin-search">Search</button>
-            </div>
-          </form>
-        </section>
-        */}
-            <section className="admin-header hidden">
-              <div className="container">
-                <h2 className="header-title">Admin Dashboard</h2>
-                <p className="header-text">
-                  Use smart search functionality to enhance your data
-                </p>
-              </div>
-            </section>
-            <section className="admin-statistics hidden">
-              <div className="statistics-container">
-                <div className="statistics-card">
-                  <h3>Total Applications</h3>
-                  <p id="applications-count">0</p>
-                </div>
-                <div className="statistics-card">
-                  <h3>Active Listings</h3>
-                  <p id="opportunities-count">0</p>
-                </div>
-                <div className="statistics-card pie-chart">
-                  <h3>Application Distribution by Country</h3>
-                  <canvas id="pieChart"></canvas>
-                </div>
-              </div>
-            </section>
-            <section className="smart-search hidden">
-              <h3 className="form-heading">Smart Search</h3>
-              <form className="admin-search-form">
-                <div className="admin-search-inputs">
-                  <input
-                    type="text"
-                    placeholder="Try Applications from Berlin..."
-                    name="search"
-                    required
-                  />
-                  <button type="submit" className="btn-admin-search">
-                    Search
-                  </button>
-                </div>
-              </form>
-            </section>
-            <section className="admin-search-results hidden">
-              <h2>Search Results</h2>
-              <div className="admin-result-cards">
-                {/*
-            (Dynamic search results content commented out)
-            */}
-              </div>
-            </section>
-          </div>
 
           {/* Newsletter Subscription Section */}
           <section id="newsletter-section" className="newsletter">

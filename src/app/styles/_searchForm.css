@@ -92,11 +92,12 @@
 
 .btn-search {
   padding: 10px 20px;
-  background-color: var(--color-primary);
-  color: var(--color-ternary);
+  background-color:  #e20074 !important;
+  color: #ffffff !important;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  padding: 10px 20px;
   font-size: 1.1rem;
   font-weight: 600;
 

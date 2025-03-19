@@ -57,7 +57,7 @@ export default function OpportunityDetails({
 
             <div className="opportunity-info">
               <div className="opportunity-experience">
-                <svg className="icon-opport-header">
+                <svg className="icon-opport-header" fill="currentColor">
                   <use href="img/icons.svg#icon-experience" />
                 </svg>
                 <p>
@@ -66,7 +66,7 @@ export default function OpportunityDetails({
                 </p>
               </div>
               <div className="opportunity-engagement">
-                <svg className="icon-opport-header">
+                <svg className="icon-opport-header" fill="currentColor">
                   <use href="img/icons.svg#icon-engagement" />
                 </svg>
                 <p>
@@ -75,7 +75,7 @@ export default function OpportunityDetails({
                 </p>
               </div>
               <div className="opportunity-deadline">
-                <svg className="icon-opport-header">
+                <svg className="icon-opport-header" fill="currentColor">
                   <use href="img/icons.svg#icon-deadline" />
                 </svg>
                 <p>
@@ -138,7 +138,7 @@ export default function OpportunityDetails({
               <h2>Contact Person</h2>
               <div className="contact-person-details">
                 <img
-                  src="img/LoveMagenta.jpeg"
+                  src="img/LoveMagenta.png"
                   alt="Contact Person"
                   className="contact-person-image"
                 />
