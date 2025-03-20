@@ -2,8 +2,8 @@ export default function OpportunityCard({ opportunity }) {
   return (
     <div className="opportunity-card">
       <img
-        src="/img/logo2.jpg"
-        alt="Telekom logo"
+        src="/img/logo.webp"
+        alt="Company logo"
         className="card-logo"
       />
       <div className="card-info">

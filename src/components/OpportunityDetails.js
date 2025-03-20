@@ -8,7 +8,7 @@ export default function OpportunityDetails({
   // onDownloadPDF,
   onApply,
 }) {
-  const isTelekom = user && user.accountType === "Telekom";
+  const isCompany = user && user.accountType === "company";
 
   return (
     // {/* Opportunity Details Section */}
@@ -28,7 +28,7 @@ export default function OpportunityDetails({
                 &larr; Back to Search
               </button>
               <img
-                src="img/logo.jpg"
+                src="img/logo.webp"
                 alt="Company Logo"
                 className="company-logo"
               />
@@ -87,7 +87,7 @@ export default function OpportunityDetails({
 
             {/* Role-based button block inserted BEFORE the description section */}
             <div className="role-based-button">
-              {isTelekom ? (
+              {isCompany ? (
                 <DownloadPDFButton
                   opportunity={opportunity}
                   user={user}
@@ -131,14 +131,14 @@ export default function OpportunityDetails({
               </ul>
             </div>
             <div className="opportunity-section">
-              <h2>About Telekom DE</h2>
+              <h2>About the Company</h2>
               <p>{opportunity.employeeInfo}</p>
             </div>
             <div className="contact-person-section">
               <h2>Contact Person</h2>
               <div className="contact-person-details">
                 <img
-                  src="img/LoveMagenta.jpeg"
+                  src="img/logo.webp"
                   alt="Contact Person"
                   className="contact-person-image"
                 />
@@ -163,7 +163,7 @@ export default function OpportunityDetails({
 
             {/* Role-based button block inserted AFTER the contact-person section */}
             <div className="role-based-button">
-              {isTelekom ? (
+              {isCompany ? (
                 <DownloadPDFButton
                   opportunity={opportunity}
                   user={user}

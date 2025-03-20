@@ -4,10 +4,10 @@ import PDFView from "../utils/PDFView.js"; // Adjust the path if necessary
 
 export default function DownloadPDFButton({ opportunity, user }) {
   const handleDownload = () => {
-    // Ensure the user is logged in as a Telekom employee
-    if (!user || user.accountType !== "Telekom") {
+    // Ensure the user is logged in as a Company employee
+    if (!user || user.accountType !== "company") {
       alert(
-        "You must be logged in as a Telekom employee to download the PDF."
+        "You must be logged in as a Company employee to download the PDF."
       );
       return;
     }

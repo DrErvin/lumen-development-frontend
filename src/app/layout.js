@@ -8,9 +8,8 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  title: "Telekom Opportunity Platform",
-  description:
-    "Connect with student opportunities at Deutsche Telekom",
+  title: "Student Opportunity Platform",
+  description: "Connect with student opportunities at the Company",
 };
 
 export default function RootLayout({ children }) {

@@ -1,11 +1,11 @@
 /* base.css */
 :root {
-  --color-primary: #e20074;
+  --color-primary: #0077b6;
   --color-secondary: #d8edf3;
   --color-ternary: white;
-  --color-primary-darker: #c00063;
-  --color-primary-darker-hard: #a90057;
-  --color-primary-shade: #f399c7;
+  --color-primary-darker: #006ba4;
+  --color-primary-darker-hard: #005f92;
+  --color-primary-shade: #1a85bd;
   --color-secondary-tint: #c2d5db;
 }
 

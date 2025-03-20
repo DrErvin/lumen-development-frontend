@@ -4,7 +4,6 @@ export default function IntroSection({ query }) {
   const { location, fieldOfStudy, type, titleOrKeyword } =
     query || {};
 
-  // Compute the title similarly to your old IntroView
   const title =
     location || fieldOfStudy || type
       ? `${location ? `${location} Opportunities` : "Opportunities"}${

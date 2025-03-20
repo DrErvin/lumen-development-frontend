@@ -350,11 +350,6 @@ export const clearLocalStorage = function () {
 
 export const preloadUniversityDomains = async function () {
   try {
-    // Fetch university data from the API
-    // const universities = await AJAX(
-    //   `${UNIVERSITY_API_URL}/search?country=germany`
-    // ); // http://universities.hipolabs.com/search?country=germany
-
     // Local patch/fix for the universities.hipolabs API not working anymore
     const universities = await AJAX(`${API_URL}/world-universities`);
 

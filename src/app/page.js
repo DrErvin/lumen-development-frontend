@@ -249,8 +249,8 @@ export default function Home() {
           <header className="main-header">
             <nav className="nav">
               <img
-                src="/img/logo.jpg"
-                alt="Telekom logo"
+                src="/img/logo.webp"
+                alt="Company logo"
                 className="nav__logo"
                 id="logo"
               />
@@ -286,10 +286,10 @@ export default function Home() {
                   className="nav__button"
                   id="publishOpportunities"
                   onClick={() => {
-                    // Only allow if user is logged in as a Telekom user.
-                    if (!user || user.accountType !== "Telekom") {
+                    // Only allow if user is logged in as a Company user.
+                    if (!user || user.accountType !== "company") {
                       alert(
-                        "You must be logged in as a Telekom user to publish."
+                        "You must be logged in as a Company user to publish."
                       );
                       return;
                     }
@@ -401,7 +401,7 @@ export default function Home() {
                 ) : (
                   <div className="container">
                     <h1 className="intro-title">
-                      Headstart your career with Deutsche Telekom
+                      Headstart your career with the Company
                     </h1>
                     <p className="intro-text">
                       Search from thousands of student opportunities
@@ -473,9 +473,9 @@ export default function Home() {
 
           {/* Newsletter Subscription Section */}
           <section id="newsletter-section" className="newsletter">
-            <h2>Top Telekom opportunities in your inbox</h2>
+            <h2>Top Company opportunities in your inbox</h2>
             <p>
-              Subscribe to the Telekom Portal newsletter to recieve
+              Subscribe to the Company Portal newsletter to recieve
               latest opportunities once a week.
             </p>
             <form action="#">
@@ -528,8 +528,8 @@ export default function Home() {
           <footer className="main-footer">
             <div className="container">
               <p>
-                &copy; 2025 Deutsche Telekom Student Platfrom. All
-                Rights Reserved.
+                &copy; 2025 The Company Student Platfrom. All Rights
+                Reserved.
               </p>
             </div>
           </footer>
