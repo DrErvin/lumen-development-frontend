@@ -23,7 +23,7 @@ class PDFView {
     const circleShape = await this.loadImage(
       "img/circleShapePDF.webp"
     );
-    doc.addImage(circleShape, "JPEG", 166.7, 0, 45, 38);
+    doc.addImage(circleShape, "webp", 166.5, -0.02, 45, 38);
 
     // Header text
     doc.setFont("helvetica", "bold");
