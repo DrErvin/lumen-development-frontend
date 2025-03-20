@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import SearchForm from "../components/SearchForm.js";
 import ResultsList from "../components/ResultsList.js";
 import ErrorMessage from "../components/ErrorMessage.js";
@@ -256,14 +257,20 @@ export default function Home() {
               />
               <ul className="nav__links">
                 <li className="nav__item">
-                  {/* <button data-section-to-show="home" className="nav__link">Home</button> */}
-                  <a
+                  <Link
+                    href="/"
                     className="nav__link"
                     id="homeBtn"
-                    href="index.html"
+                    onClick={() => {
+                      window.location.hash = "";
+                      setHasSearched(false);
+                      setSearchQuery(null);
+                      setResults([]);
+                      setError(null);
+                    }}
                   >
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav__item">
                   <a className="nav__link" id="admin-btn" href="#">
