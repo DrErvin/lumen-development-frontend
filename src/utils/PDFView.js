@@ -167,4 +167,6 @@ class PDFView {
   }
 }
 
-export default new PDFView();
+const x = new PDFView();
+
+export default  x;

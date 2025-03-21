@@ -17,7 +17,7 @@ export default function SignupModal({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  if (!isOpen) return null;
+  
 
   // Validate email when it changes
   useEffect(() => {
@@ -32,8 +32,11 @@ export default function SignupModal({
         setEmailValid(valid);
       }
     }
-    validate();
-  }, [email, onValidateEmail]);
+    if (!isOpen) validate();
+    
+  }, [email, onValidateEmail, isOpen]);
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -102,7 +102,7 @@ export default function LoginModal({
 
             <div className="login__footer">
               <p>
-                Don't have an account?{" "}
+                Don&apos;t have an account?
                 <button
                   className="show__signup__btn"
                   id="openSignUpForm"
