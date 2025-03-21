@@ -17,10 +17,10 @@ export default function SignupModal({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
 
-  if (!isOpen) return null;
-
   // Validate email when it changes
   useEffect(() => {
+    if (!isOpen) return;
+
     async function validate() {
       // Skip validation if email is empty
       if (email.trim() === "") {
@@ -33,7 +33,9 @@ export default function SignupModal({
       }
     }
     validate();
-  }, [email, onValidateEmail]);
+  }, [email, onValidateEmail, isOpen]);
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

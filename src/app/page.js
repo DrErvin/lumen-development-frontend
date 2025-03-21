@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import SearchForm from "../components/SearchForm.js";
 import ResultsList from "../components/ResultsList.js";
 import ErrorMessage from "../components/ErrorMessage.js";
@@ -249,11 +250,13 @@ export default function Home() {
           {/* Header Section */}
           <header className="main-header">
             <nav className="nav">
-              <img
+              <Image
                 src="/img/logo.webp"
                 alt="Company logo"
                 className="nav__logo"
                 id="logo"
+                width={83}
+                height={56}
               />
               <ul className="nav__links">
                 <li className="nav__item">

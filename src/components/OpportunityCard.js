@@ -1,10 +1,14 @@
+import Image from "next/image";
+
 export default function OpportunityCard({ opportunity }) {
   return (
     <div className="opportunity-card">
-      <img
+      <Image
         src="/img/logo.webp"
         alt="Company logo"
         className="card-logo"
+        width={60}
+        height={40}
       />
       <div className="card-info">
         <h3 className="card-type">{opportunity.type || "N/A"}</h3>

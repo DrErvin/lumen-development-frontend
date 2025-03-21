@@ -1,5 +1,6 @@
 // components/OpportunityDetails.js
 import DownloadPDFButton from "./DownloadPDFButton";
+import Image from "next/image";
 
 export default function OpportunityDetails({
   opportunity,
@@ -27,10 +28,12 @@ export default function OpportunityDetails({
               >
                 &larr; Back to Search
               </button>
-              <img
-                src="img/logo.webp"
+              <Image
+                src="/img/logo.webp"
                 alt="Company Logo"
                 className="company-logo"
+                width={107}
+                height={72}
               />
               <h1 className="opportunity-title">
                 {opportunity.title || "Untitled Opportunity"}
@@ -137,10 +140,12 @@ export default function OpportunityDetails({
             <div className="contact-person-section">
               <h2>Contact Person</h2>
               <div className="contact-person-details">
-                <img
-                  src="img/logo.webp"
+                <Image
+                  src="/img/logo.webp"
                   alt="Contact Person"
                   className="contact-person-image"
+                  width={120}
+                  height={80}
                 />
                 <div className="contact-person-info">
                   <p>

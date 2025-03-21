@@ -27,7 +27,8 @@
 
 .company-logo {
   /* width: 50px; */
-  height: 4.5rem;
+  height: 4.5rem !important;
+  width: 107px !important;
   margin-right: 10px;
   vertical-align: middle;
   border-radius: 3px;
@@ -209,7 +210,8 @@
 }
 
 .contact-person-image {
-  width: 120px;
+  height: 80px !important;
+  width: 120px !important;
   /* height: 80px; */
   border-radius: 3px;
   /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
