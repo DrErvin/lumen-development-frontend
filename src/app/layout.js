@@ -8,7 +8,7 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  title: "Student Opportunity Platform",
+  title: "Student-Company Platform",
   description: "Connect with student opportunities at the Company",
 };
 
