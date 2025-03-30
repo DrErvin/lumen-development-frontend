@@ -1,6 +1,6 @@
-// export const API_URL = "http://localhost:3000"; // Local backend API
-export const API_URL =
-  "https://student-company-platform-server.onrender.com"; // Deployed backend API
+export const API_URL = "http://localhost:3000"; // Local backend API
+// export const API_URL =
+// "https://student-company-platform-server.onrender.com"; // Deployed backend API
 export const TIMEOUT_SEC = 10; // In seconds
 export const RES_PER_PAGE = 10;
 export const MODAL_CLOSE_SEC = 2.5;
