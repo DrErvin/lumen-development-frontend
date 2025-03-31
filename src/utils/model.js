@@ -515,12 +515,61 @@ export const fetchFeatured = async function () {
   }
 };
 
+export const performSmartSearch = async function (query) {
+  try {
+    // Direct fetch without timeout for smart search
+    // Using of native JS fetch instead of our custom AJAX function
+    // due to current configuration of backend server, this is needed
+    const res = await fetch(`${API_URL}/smart-search`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+
+    if (!res.ok) throw new Error(`Failed to fetch (${res.status})`);
+    const results = await res.json();
+
+    return results;
+  } catch (err) {
+    console.error("Error performing smart search:", err);
+    throw err;
+  }
+};
+
 export const fetchAllOpportunities = async function () {
   try {
     const opportunities = await AJAX(`${API_URL}/opportunities`);
     return opportunities;
   } catch (err) {
     console.error("Error fetching opportunities:", err);
+    throw err;
+  }
+};
+
+export const fetchAllApplications = async function () {
+  try {
+    const applications = await AJAX(`${API_URL}/applications`);
+    return applications;
+  } catch (err) {
+    console.error("Error fetching applications:", err);
+    throw err;
+  }
+};
+
+export const fetchAllApplicantsData = async function () {
+  try {
+    // Fetch all applications and accounts
+    const applications = await fetchAllApplications();
+    const accounts = await AJAX(`${API_URL}/accounts`);
+
+    // Match user IDs in applications to accounts
+    const matchedAccounts = applications
+      .map((app) => accounts.find((acc) => acc.id === app.user_id))
+      .filter((account) => account !== undefined); // Filter out unmatched accounts
+
+    return matchedAccounts; // Return an array of matched account objects
+  } catch (err) {
+    console.error("Error fetching applicants data:", err);
     throw err;
   }
 };

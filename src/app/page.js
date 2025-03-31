@@ -15,6 +15,7 @@ import SignupModal from "../components/SignupModal.js";
 import ApplyModal from "../components/ApplyModal.js";
 import OpportunityDetails from "../components/OpportunityDetails.js";
 import PublishModal from "../components/PublishModal.js";
+import AdminDashboard from "../components/AdminDashboard.js";
 import * as model from "../utils/model.js";
 import { scrollToTop } from "../utils/helpers.js";
 import { RES_PER_PAGE } from "../utils/config.js";
@@ -26,6 +27,7 @@ export default function Home() {
     setMounted(true);
   }, []);
 
+  // Search Form
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -60,6 +62,18 @@ export default function Home() {
 
   // Publish Opportunity
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+
+  // Admin Dashboard
+  const [isAdminView, setIsAdminView] = useState(false);
+  const [adminStats, setAdminStats] = useState(null);
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminError, setAdminError] = useState(null);
+  const [adminSmartSearchResults, setAdminSmartSearchResults] =
+    useState([]);
+  const [adminSmartSearchLoading, setAdminSmartSearchLoading] =
+    useState(false);
+  const [adminSmartSearchError, setAdminSmartSearchError] =
+    useState(null);
 
   // --- Persistence on mount ---
   useEffect(() => {
@@ -240,10 +254,93 @@ export default function Home() {
     await model.submitApplication(formData);
   };
 
+  // Admin Dashboard
+  useEffect(() => {
+    if (isAdminView && user && user.accountType === "company") {
+      async function fetchAdminStats() {
+        setAdminLoading(true);
+        try {
+          const opportunities = await model.fetchAllOpportunities();
+          const applications = await model.fetchAllApplications();
+          const applicantsData = await model.fetchAllApplicantsData();
+
+          const activeOpportunities = opportunities.filter(
+            (opp) => new Date(opp.endingDate) >= new Date()
+          ).length;
+          const applicationsCount = applications.length;
+
+          const applicantsByCountry = applicantsData.reduce(
+            (acc, applicant) => {
+              const country =
+                applicant.university_location || "Unknown";
+              if (!acc[country]) acc[country] = new Set();
+              acc[country].add(applicant.id);
+              return acc;
+            },
+            {}
+          );
+
+          const labels = Object.keys(applicantsByCountry).map(
+            (country) =>
+              `${country} (${applicantsByCountry[country].size})`
+          );
+          const values = Object.values(applicantsByCountry).map(
+            (set) => set.size
+          );
+
+          setAdminStats({
+            opportunitiesCount: activeOpportunities,
+            applicationsCount,
+            chartData: { labels, values },
+          });
+        } catch (err) {
+          setAdminError(err.message);
+        } finally {
+          setAdminLoading(false);
+        }
+      }
+      fetchAdminStats();
+    }
+  }, [isAdminView, user]);
+
+  // Handler for admin smart search
+  const handleAdminSmartSearch = async (query) => {
+    setAdminSmartSearchLoading(true);
+    setAdminSmartSearchError(null);
+    try {
+      const results = await model.performSmartSearch(query);
+      setAdminSmartSearchResults(results);
+
+      if (!results || results.length === 0) {
+        setAdminSmartSearchError(
+          "No search results found for your query."
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      setAdminSmartSearchError(err.message);
+    } finally {
+      setAdminSmartSearchLoading(false);
+    }
+  };
+
+  const showAdminDashboard = () => {
+    if (!user || user.accountType !== "company") {
+      alert(
+        "You must be logged in as a Company user to access the Admin Dashboard."
+      );
+      return;
+    }
+    setIsAdminView(true);
+  };
+
+  const hideAdminDashboard = () => {
+    setIsAdminView(false);
+  };
+
   return (
     <>
       {!mounted ? (
-        // Optionally, you could render a placeholder or spinner here while waiting.
         <LoadingSpinner />
       ) : (
         <main>
@@ -270,13 +367,19 @@ export default function Home() {
                       setSearchQuery(null);
                       setResults([]);
                       setError(null);
+                      hideAdminDashboard();
                     }}
                   >
                     Home
                   </Link>
                 </li>
                 <li className="nav__item">
-                  <a className="nav__link" id="admin-btn" href="#">
+                  <a
+                    className="nav__link"
+                    id="admin-btn"
+                    href="#"
+                    onClick={showAdminDashboard}
+                  >
                     Admin Dashboard
                   </a>
                 </li>
@@ -377,8 +480,20 @@ export default function Home() {
             }}
           />
 
-          {/* Conditional content: if an opportunity is selected, render its details; otherwise, render the normal main content */}
-          {typeof window !== "undefined" && window.location.hash ? (
+          {/* Conditional content: Admin Dashboard, Opportunity Details and Main/Home content */}
+          {isAdminView ? (
+            <AdminDashboard
+              isCompanyUser={user && user.accountType === "company"}
+              stats={adminStats}
+              loadingStats={adminLoading}
+              error={adminError}
+              onSmartSearch={handleAdminSmartSearch}
+              smartSearchResults={adminSmartSearchResults}
+              loadingSmartSearch={adminSmartSearchLoading}
+              smartSearchError={adminSmartSearchError}
+            />
+          ) : typeof window !== "undefined" &&
+            window.location.hash ? (
             detailsLoading || !selectedOpportunity ? (
               <LoadingSpinner />
             ) : (

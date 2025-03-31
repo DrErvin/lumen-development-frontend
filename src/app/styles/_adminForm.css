@@ -18,6 +18,8 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
+
+  transition: all 0.3s;
 }
 
 .admin-search-inputs input:focus,
@@ -34,7 +36,9 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
+
+  transition: all 0.3s;
 }
 
 .btn-admin-search:hover {
@@ -44,6 +48,7 @@
 .form-heading {
   text-align: center;
   font-size: 1.4rem;
+  color: #666;
 }
 
 /* Responsive Design */

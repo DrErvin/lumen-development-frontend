@@ -5,14 +5,14 @@
 }
 
 .header-title {
-  font-size: 2rem;
-  color: #333;
-  font-weight: 800;
+  font-size: 1.8rem;
+  color: #666;
+  font-weight: 600;
   margin: 0;
 }
 
 .header-text {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #666;
   font-weight: 500;
   margin: 0;
