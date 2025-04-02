@@ -1,52 +1,52 @@
-import { TIMEOUT_SEC } from "./config.js";
+import { createClient } from '@supabase/supabase-js';
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(
-        new Error(`Request took too long! Timeout after ${s} second`)
-      );
-    }, s * 1000);
-  });
+// Initialize Supabase client
+//const supabaseUrl = 'https://bbecuxasdgkjkkxibiys.supabase.co'; // Replace with your Supabase URL
+//const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZWN1eGFzZGdramtreGliaXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI4MjY2ODMsImV4cCI6MjA1ODQwMjY4M30.QUabkzPiuzLQrOfm4cOuoOZChpnvaZ0dL8BwY4F9lsI'; // Replace with your anon public key
+//export const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// provjeriti da li radi samo ovaj nacin u produkciji i developmentu enviroment varijable
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error("Supabase URL or Key is missing. Please check your environment variables.");
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Helper function to fetch data from Supabase
+export const fetchData = async (table, filters = {}) => {
+  const { data, error } = await supabase
+    .from(table)
+    .select('*')
+    .match(filters);
+
+  if (error) throw new Error(error.message);
+  return data;
 };
 
-export const AJAX = async function (url, uploadData = undefined) {
-  try {
-    const fetchPro = uploadData
-      ? fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(uploadData),
-        })
-      : fetch(url);
+// Helper function to insert data into Supabase
+export const insertData = async (table, record) => {
+  const { data, error } = await supabase
+    .from(table)
+    .insert([record]);
 
-    const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-    return data;
-  } catch (err) {
-    throw err;
-  }
+  if (error) throw new Error(error.message);
+  return data;
 };
 
-export const sendFormData = async function (url, formData) {
-  try {
-    const fetchPro = fetch(url, {
-      method: "POST",
-      body: formData,
-    });
+// Helper function to upload files to Supabase Storage
+export const uploadFile = async (bucket, file) => {
+  const filePath = `${Date.now()}-${file.name}`;
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(filePath, file);
 
-    const res = await fetchPro;
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-    return data;
-  } catch (err) {
-    throw err;
-  }
+  if (error) throw new Error(error.message);
+  return data;
 };
 
+// Retain calculateRemainingDays and scrollToTop as they are
 export const calculateRemainingDays = (endingDate) => {
   const currentDate = new Date();
   const targetDate = new Date(endingDate);

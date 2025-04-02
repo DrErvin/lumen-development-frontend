@@ -1,10 +1,5 @@
-import {
-  RES_PER_PAGE,
-  API_URL,
-  EMPLOYEE_INFO,
-  // UNIVERSITY_API_URL,
-} from "./config.js";
-import { AJAX, sendFormData } from "./helpers.js";
+import { RES_PER_PAGE, EMPLOYEE_INFO } from "./config.js";
+import { supabase } from "./helpers.js";
 import { calculateRemainingDays } from "./helpers.js";
 
 export const state = {
@@ -22,29 +17,23 @@ export const state = {
 const createOpportunityObject = function (data) {
   const opportunity = data[0];
   return {
-    id: opportunity.id,
+    id: opportunity.id || Date.now(),
     type: opportunity.type || "Unknown Type",
-    fieldOfStudy: opportunity.fieldOfStudy || "General",
+    fieldOfStudy: opportunity.field_of_study || "General",
     title: opportunity.title || "Untitled Opportunity",
-    company: opportunity.company || "Copmany Name",
+    company: opportunity.company || "Company Name",
     location: opportunity.location || "Not specified",
-    opportunityDescription:
-      opportunity.description || "Description not available",
-    yourProfile: opportunity.qualificationsAndRequirements || [],
+    opportunityDescription: opportunity.description || "Description not available",
+    yourProfile: opportunity.qualifications_and_requirements || [],
     tags: opportunity.tags || [],
-    experience: opportunity.experienceRequired || [],
-    engagementType:
-      opportunity.engagementType || "Unknown Engagement Type",
-    workArrangement:
-      opportunity.workArrangement || "Unknown Work Arrangement",
-    deadline:
-      calculateRemainingDays(opportunity.endingDate) ||
-      "No deadline provided",
+    experience: opportunity.experience_required || [],
+    engagementType: opportunity.engagement_type || "Unknown Engagement Type",
+    workArrangement: opportunity.work_arrangement || "Unknown Work Arrangement",
+    deadline: calculateRemainingDays(opportunity.ending_date) || "No deadline provided",
     benefits: opportunity.benefits || [],
-    employeeInfo: opportunity.employeeInfo || EMPLOYEE_INFO,
-    contactPerson: opportunity.contactPerson || "Not specified",
-    contactPersonEmail:
-      opportunity.contactPersonEmail || "Not provided",
+    employeeInfo: opportunity.employee_info || EMPLOYEE_INFO,
+    contactPerson: opportunity.contact_person || "Not specified",
+    contactPersonEmail: opportunity.contact_person_email || "Not provided",
   };
 };
 
@@ -53,44 +42,22 @@ const createUserObject = function (account) {
     id: account.id,
     accountType: account.id.startsWith("s-") ? "student" : "company",
     name_and_surname: account.name_and_surname || "",
-    // id: user.id,
-    // nameAndSurname: user.name_and_surname || '',
-    // email: user.email || '',
-    // password: user.password || '', // Avoid using plaintext passwords; ensure they're hashed in a real application
-    // accountType: user.account_type || '',
-    // universityName: user.university_name || '',
-    // universityLocation: user.university_location || '',
   };
 };
 
 export const loadOpportunity = async function (id) {
   try {
-    // const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
-    const data = await AJAX(`${API_URL}/opportunities`);
-    console.log(data);
-    // console.log(typeof id);
+    const { data, error } = await supabase
+      .from("opportunities")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-    // Find the opportunity with the specified ID
-    const result = data.find(
-      (opportunity) => +opportunity.id === +id
-    );
-    // console.log(result);
-    if (!result)
-      throw new Error(`Opportunity with ID ${id} not found`);
+    if (error) throw new Error(error.message);
 
-    state.opportunity = createOpportunityObject([result]);
-
-    // Check if recipe that you click on has the same ID as the recipes
-    // stored in the bookmark array in state
-    // This way each recipe you open will always get a bookmakred
-    // tag either true or false
-    // if (state.bookmarks.some((bookmark) => bookmark.id === id))
-    //   state.recipe.bookmarked = true;
-    // else state.recipe.bookmarked = false;
-
+    state.opportunity = createOpportunityObject([data]);
     console.log(state.opportunity);
   } catch (err) {
-    // Temp error handling
     console.error(`${err} 💥`);
     throw err;
   }
@@ -98,133 +65,113 @@ export const loadOpportunity = async function (id) {
 
 export const loadSearchResults = async function (query) {
   try {
-    // Save the query in the global state
     state.search.query = query;
 
-    // Fetch the JSON data from the local file
-    const data = await AJAX(`${API_URL}/opportunities`);
-    // If was a real API, we would use something like this
-    //  const data = await AJAX(`${API_URL}?${queryString}`);
-    console.log("Check for data in loadSearchResults", data);
+    const { data, error } = await supabase.from("opportunities").select("*");
 
-    // Filter the data based on the query parameters
+    if (error) throw new Error(error.message);
+
     const { location, titleOrKeyword, fieldOfStudy, type } = query;
-    const matchedResults = data.filter((opportunity) => {
+
+    const results = data.filter((opportunity) => {
       return (
-        (!location ||
-          opportunity.location
-            .toLowerCase()
-            .includes(location.toLowerCase())) &&
+        (!location || opportunity.location.toLowerCase().includes(location.toLowerCase())) &&
         (!titleOrKeyword ||
-          opportunity.title
-            .toLowerCase()
-            .includes(titleOrKeyword.toLowerCase()) ||
-          opportunity.tags.some((tag) =>
-            tag.toLowerCase().includes(titleOrKeyword.toLowerCase())
-          )) &&
-        (!fieldOfStudy ||
-          (opportunity.fieldOfStudy &&
-            opportunity.fieldOfStudy
-              .toLowerCase()
-              .includes(fieldOfStudy.toLowerCase()))) &&
-        (!type ||
-          opportunity.type.toLowerCase().includes(type.toLowerCase()))
+          opportunity.title.toLowerCase().includes(titleOrKeyword.toLowerCase()) ||
+          opportunity.tags.some((tag) => tag.toLowerCase().includes(titleOrKeyword.toLowerCase()))) &&
+        (!fieldOfStudy || opportunity.field_of_study.toLowerCase().includes(fieldOfStudy.toLowerCase())) &&
+        (!type || opportunity.type.toLowerCase().includes(type.toLowerCase()))
       );
     });
 
-    // Map the filtered results to include only the required fields
-    state.search.results = matchedResults.map((opportunity) => ({
+    state.search.results = results.map((opportunity) => ({
       id: opportunity.id,
       type: opportunity.type,
       location: opportunity.location,
       title: opportunity.title,
-      experience: opportunity.experienceRequired,
-      deadline: calculateRemainingDays(opportunity.endingDate),
+      experience: opportunity.experience_required,
+      deadline: calculateRemainingDays(opportunity.ending_date),
     }));
 
-    // Reset the current page to the first page
     state.search.page = 1;
-
-    console.log(state.search.results); // Debug: Check processed search results
+    console.log(state.search.results);
   } catch (err) {
     console.error(`${err} 💥`);
     throw err;
   }
 };
 
-export const getSearchResultsPage = function (
-  page = state.search.page
-) {
+export const initializeApp = async () => {
+  try {
+    // Clear user state
+    clearState();
+
+    // Fetch user details from Supabase
+    await getUserDetails();
+  } catch (err) {
+    console.error("Error initializing app:", err);
+  }
+};
+
+export const logoutUser = function () {
+  try {
+    // Clear user state
+    clearState();
+
+    console.log("User logged out successfully.");
+  } catch (err) {
+    console.error("Error logging out:", err);
+    throw err;
+  }
+};
+
+export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
-
-  const start = (page - 1) * state.search.resultsPerPage; // 0
-  const end = page * state.search.resultsPerPage; // 9
-
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
   return state.search.results.slice(start, end);
 };
 
 export const uploadOpportunity = async function (newOpportunity) {
   try {
-    // Process tags field into an array
     const tags = newOpportunity.tags
       ? newOpportunity.tags.split(",").map((tag) => tag.trim())
       : [];
-
-    // Process experienceRequired field into an array
     const experienceRequired = newOpportunity.experienceRequired
-      ? newOpportunity.experienceRequired
-          .split(",")
-          .map((exp) => exp.trim())
+      ? newOpportunity.experienceRequired.split(",").map((exp) => exp.trim())
       : [];
-
-    // Process qualificationsAndRequirements into an array
     const qualificationsAndRequirements =
       newOpportunity.qualificationsAndRequirements
-        ? newOpportunity.qualificationsAndRequirements
-            .split(";")
-            .map((req) => req.trim())
+        ? newOpportunity.qualificationsAndRequirements.split(";").map((req) => req.trim())
         : [];
-
-    // Process benefits into an array
     const benefits = newOpportunity.benefits
       ? newOpportunity.benefits.split(";").map((ben) => ben.trim())
       : [];
 
-    // Create opportunity object
     const opportunity = {
-      id: Date.now(), // Timestamp-based numeric ID
+      id: Date.now(),
       type: newOpportunity.type,
-      fieldOfStudy: newOpportunity.fieldOfStudy,
+      field_of_study: newOpportunity.fieldOfStudy,
       title: newOpportunity.title,
       company: "Company Name",
       location: newOpportunity.location,
       description: newOpportunity.description,
-      qualificationsAndRequirements, // Processed field
-      benefits, // Processed field
+      qualifications_and_requirements: qualificationsAndRequirements,
+      benefits,
       tags,
-      engagementType: newOpportunity.engagementType,
-      workArrangement: newOpportunity.workArrangement,
-      contactPerson: newOpportunity.contactPerson,
-      contactPersonEmail: newOpportunity.contactPersonEmail,
-      experienceRequired, // Processed field
-      endingDate: newOpportunity.endingDate,
+      engagement_type: newOpportunity.engagementType,
+      work_arrangement: newOpportunity.workArrangement,
+      contact_person: newOpportunity.contactPerson,
+      contact_person_email: newOpportunity.contactPersonEmail,
+      experience_required: experienceRequired,
+      ending_date: newOpportunity.endingDate,
     };
 
-    // If real API was used we could now upload and get a response
-    // const data = await AJAX(`${API_URL}?key=${KEY}`, opportunity);
-    // state.opportunity = createOpportunityObject(data);
+    const { data, error } = await supabase.from("opportunities").insert([opportunity]).select();
 
-    // Send data to server
-    const response = await AJAX(
-      `${API_URL}/opportunities`,
-      opportunity
-    );
-    console.log("Server Response:", response);
+    if (error) throw new Error(error.message);
 
-    // Add to global state
-    state.opportunity = createOpportunityObject([response.data]);
-    // state.opportunity = createOpportunityObject(data);
-
+    state.opportunity = createOpportunityObject(data);
     console.log("Opportunity Uploaded:", state.opportunity);
   } catch (err) {
     console.error("Error with uploading opportunity:", err);
@@ -234,133 +181,83 @@ export const uploadOpportunity = async function (newOpportunity) {
 
 export const verifyLogin = async function (data) {
   try {
-    // Fetch all accounts from the API
-    const accounts = await AJAX(`${API_URL}/accounts`);
+    const { email, password } = data;
 
-    // Find the account with matching email and password
-    const account = accounts.find(
-      (acc) =>
-        acc.email === data.email && acc.password === data.password
-    );
+    // Query Supabase for the account matching the email and password
+    const { data: accounts, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("email", email)
+      .eq("password", password);
 
-    // Update the state if the account is valid
+    if (error) throw new Error(error.message);
+
+    // Find the first matching account
+    const account = accounts?.[0];
+    
     if (account) {
       state.user = createUserObject(account);
-
       saveUserToLocalStorage();
     }
 
-    // Return the account if found, otherwise return null
     return account || null;
   } catch (err) {
-    console.error("Error with verifiying login:", err);
+    console.error("Error with verifying login:", err);
     throw err;
+    
   }
-};
+}
 
-const saveUserToLocalStorage = function () {
-  localStorage.setItem("loggedInUser", JSON.stringify(state.user));
-};
 
-export const loadUserFromLocalStorage = function () {
-  const storedUser = localStorage.getItem("loggedInUser");
-  if (!storedUser) return;
 
-  const parsedUser = JSON.parse(storedUser);
-  state.user.id = parsedUser.id;
-  state.user.accountType = parsedUser.accountType;
 
-  // if (storedUser) {
-  //   const parsedUser = JSON.parse(storedUser);
-  //   state.user.id = parsedUser.id;
-  //   state.user.accountType = parsedUser.accountType;
-  // }
-};
 
 export const isLoggedIn = function (requiredType = null) {
   const user = state.user;
-
-  // Check if the user is logged in
   if (!user.id) return false;
-
-  // If a specific account type is required, check against it
   if (requiredType && user.accountType !== requiredType) {
     return false;
   }
-
-  // Return true if no specific account type is required, or if the type matches
   return true;
 };
 
 export const getUserDetails = async function () {
   try {
-    // Ensure user ID is available in the global state
     if (!state.user.id) return null;
 
-    // Fetch account data from the API
-    const accounts = await AJAX(`${API_URL}/accounts`);
+    // Query Supabase for the user's details
+    const { data: accounts, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("id", state.user.id);
 
-    // Find the user by ID
-    const user = accounts.find((acc) => acc.id === state.user.id);
+    if (error) throw new Error(error.message);
+
+    const user = accounts?.[0];
+    if (user) {
+      state.user = createUserObject(user); // Update user state
+    }
+
     return user || null;
   } catch (err) {
     console.error("Error fetching user details:", err);
     throw err;
   }
 };
-
 export const clearState = function () {
-  try {
-    // Clear user state
-    // state.user.id = null;
-    // state.user.accountType = null;
-    state.user = {};
-
-    console.log("User state cleared.");
-  } catch (err) {
-    console.error("Error clearing the global state:", err);
-    throw err;
-  }
+  state.user = {}; // Reset user state
+  console.log("User state cleared.");
 };
 
-export const clearLocalStorage = function () {
-  try {
-    // Clear local storage
-    localStorage.removeItem("user");
-    localStorage.removeItem("loggedInUser");
-
-    console.log("Local storage cleared.");
-  } catch (err) {
-    console.error("Error clearing local storage:", err);
-    throw err;
-  }
-};
-
-// export const clearHistory = function () {
-//   try {
-//     // Clear browser history
-//     window.history.pushState(null, '', '/');
-
-//     console.log('Browser history cleared.');
-//   } catch (err) {
-//     console.error('Error clearing history:', err);
-//     throw err;
-//   }
-// };
 
 export const preloadUniversityDomains = async function () {
   try {
-    // Local patch/fix for the universities.hipolabs API not working anymore
-    const universities = await AJAX(`${API_URL}/world-universities`);
+    const { data, error } = await supabase.from("world_universities_and_domains").select("*");
 
-    // Cache all university domains
-    state.universityDomainsCache = universities.flatMap(
-      (uni) => uni.domains
-    );
-    console.log(
-      "University domains preloaded:",
-      state.universityDomainsCache
-    );
+    if (error) throw new Error(error.message);
+
+    state.universityDomainsCache = data.flatMap((uni) => uni.domains);
+    console.log("University domains preloaded:", state.universityDomainsCache);
   } catch (err) {
     console.error("Error preloading university domains:", err);
     throw err;
@@ -373,21 +270,13 @@ export const areUniversitiesCached = function () {
 
 export const validateEmail = async function (email) {
   try {
-    console.log("email to validate: ", email);
-
-    // Ensure email contains an '@' before proceeding
     if (!email.includes("@")) {
       console.log("Invalid email format: Missing @ symbol.");
       return false;
     }
 
-    // Extract the domain from the email
     const emailDomain = email.split("@")[1];
-
-    // Normalize the domain by progressively removing subdomains
     const domainParts = emailDomain.split(".");
-
-    // Check progressively from the full domain to subdomains
     const isValidDomain = domainParts.some((_, index) => {
       const normalizedDomain = domainParts.slice(index).join(".");
       return (
@@ -396,10 +285,8 @@ export const validateEmail = async function (email) {
       );
     });
 
-    console.log(
-      isValidDomain ? "Valid domain found" : "Invalid domain"
-    );
-    return isValidDomain; // Return true if a valid domain is found
+    console.log(isValidDomain ? "Valid domain found" : "Invalid domain");
+    return isValidDomain;
   } catch (err) {
     console.error("Error validating email:", err);
     throw err;
@@ -408,21 +295,15 @@ export const validateEmail = async function (email) {
 
 export const generateUserInfo = async function (email) {
   try {
-    // Extract the domain from the email
     const emailDomain = email.split("@")[1];
-
-    // Normalize the domain by progressively removing subdomains
     const domainParts = emailDomain.split(".");
     const normalizedDomain = domainParts.slice(-2).join(".");
-
-    // Determine if it's a Company or university domain
     const isCompanyDomain = normalizedDomain === "company.com";
     const idPrefix = isCompanyDomain ? "c-" : "s-";
     const account_type = isCompanyDomain ? "company" : "student";
 
-    // Default user object
     const userInfo = {
-      id: `${idPrefix}${Date.now()}`, // Unique ID
+      id: `${idPrefix}${Date.now()}`,
       email,
       account_type,
       university_name: null,
@@ -431,19 +312,18 @@ export const generateUserInfo = async function (email) {
 
     if (isCompanyDomain) return userInfo;
 
-    // Fetch university details only if it's a university domain
-    // if (!isCompanyDomain) {
-    const universities = await AJAX(`${API_URL}/world-universities`);
-    const university = universities.find((uni) =>
+    const { data, error } = await supabase.from("world_universities_and_domains").select("*");
+
+    if (error) throw new Error(error.message);
+
+    const university = data.find((uni) =>
       uni.domains.some((domain) => emailDomain.endsWith(domain))
     );
 
     if (!university) return userInfo;
-    // if (university) {
+
     userInfo.university_name = university.name;
     userInfo.university_location = university.country;
-    // }
-    // }
 
     return userInfo;
   } catch (err) {
@@ -454,43 +334,49 @@ export const generateUserInfo = async function (email) {
 
 export const uploadAccount = async function (newAccount) {
   try {
-    // Generate user info based on the email
     const userInfo = await generateUserInfo(newAccount.email);
 
-    // Prepare account object
     const account = {
-      ...userInfo, // Use generated user info
+      ...userInfo,
       name_and_surname: newAccount.nameAndSurname,
       password: newAccount.password,
     };
 
-    // Upload to the API
-    const response = await AJAX(`${API_URL}/accounts`, account);
-    console.log("Account Uploaded:", response);
+    const { data, error } = await supabase.from("accounts").insert([account]).select();
 
-    // Add to global state
-    state.user = createUserObject(response.data);
+    if (error) throw new Error(error.message);
+
+    state.user = createUserObject(data[0]);
     console.log("User Added to Global State:", state.user);
-
-    saveUserToLocalStorage();
+    LocalStorage();
   } catch (err) {
-    console.error("Error uploading account:", err);
+    consaveUserTosole.error("Error uploading account:", err);
     throw err;
   }
 };
 
 export const submitApplication = async function (formData) {
   try {
-    // console.log('Submitting application data:', formData);
+    const userId = formData.get("userId");
+    const opportunityId = formData.get("opportunityId");
+    const file = formData.get("cvUpload");
 
-    // Send FormData to the backend
-    const response = await sendFormData(
-      `${API_URL}/applications`,
-      formData
-    );
+    const application = {
+      application_id: `${Date.now()}`,
+      user_id: userId,
+      opportunity_id: opportunityId,
+      application_date: new Date().toISOString(),
+    };
 
-    console.log("Application submitted successfully:", response);
-    return response;
+    const { error } = await supabase.from("applications").insert([application]);
+
+    if (error) throw new Error(error.message);
+
+    if (file) {
+      // Handle file upload logic here (e.g., using a cloud storage service).
+    }
+
+    console.log("Application submitted successfully");
   } catch (err) {
     console.error("Error submitting application:", err);
     throw err;
@@ -499,26 +385,34 @@ export const submitApplication = async function (formData) {
 
 export const fetchFeatured = async function () {
   try {
-    // const res = await fetch(`${API_URL}/opportunities`);
-    // if (!res.ok) throw new Error('Failed to fetch opportunities');
-    // const data = await res.json();
+    const { data, error } = await supabase
+      .from("opportunities")
+      .select("*")
+      .eq("featured", true);
 
-    const data = await AJAX(`${API_URL}/opportunities`);
+    if (error) throw new Error(error.message);
 
-    // Filter opportunities to only include those that are featured
-    const featuredOpportunities = data.filter(
-      (opportunity) => opportunity.featured === true
-    );
-    return featuredOpportunities; // Return only featured opportunities
+    console.log("Fetched Opportunities:", data);
+
+    if (!data || data.length === 0) {
+      console.warn("No opportunities found in the database.");
+      return [];
+    }
+
+    return data;
   } catch (err) {
+    console.error("Error fetching featured opportunities:", err);
     throw err;
   }
 };
 
 export const fetchAllOpportunities = async function () {
   try {
-    const opportunities = await AJAX(`${API_URL}/opportunities`);
-    return opportunities;
+    const { data, error } = await supabase.from("opportunities").select("*");
+
+    if (error) throw new Error(error.message);
+
+    return data;
   } catch (err) {
     console.error("Error fetching opportunities:", err);
     throw err;

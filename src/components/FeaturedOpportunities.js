@@ -8,9 +8,13 @@ export default function FeaturedOpportunities({
   loading,
   error,
 }) {
+  // Debugging log to confirm props
+  console.log("Featured Opportunities Props:", { data, loading, error });
+
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage text={error} />;
-  if (!data || data.length === 0) return null; // Optionally, show a fallback message
+  if (!data || data.length === 0)
+    return <p>No featured opportunities available.</p>;
 
   return (
     <div className="opportunities-grid">
@@ -28,9 +32,7 @@ export default function FeaturedOpportunities({
               e.preventDefault();
               // If the hash is already the same, force a hashchange event.
               if (window.location.hash.slice(1) === opportunity.id) {
-                window.dispatchEvent(
-                  new HashChangeEvent("hashchange")
-                );
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
               } else {
                 window.location.hash = opportunity.id;
               }

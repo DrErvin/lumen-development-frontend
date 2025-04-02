@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { MODAL_CLOSE_SEC } from "../utils/config";
 
@@ -13,29 +13,35 @@ export default function LoginModal({
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [success, setSuccess] = useState("");
 
-  if (!isOpen) return null; // Do not render if modal is closed
+  // Close the modal if it's not open
+  if (!isOpen) return null;
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
+      // Call the login handler passed as a prop
       await onLogin({ email, password });
-      // Instead of closing immediately, show the success message
+
+      // Show success message and clear input fields
       setSuccess("You have been successfully logged in!");
-      // Clear the input fields
       setEmail("");
       setPassword("");
-      // After a delay, clear the success and close the modal
+
+      // Automatically close the modal after a delay
       setTimeout(() => {
         setSuccess("");
         onClose();
       }, MODAL_CLOSE_SEC * 1000);
     } catch (err) {
-      setError(err.message);
+      // Handle login errors
+      console.error("Login error:", err.message);
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
@@ -45,15 +51,19 @@ export default function LoginModal({
     <div className="login-modal">
       {/* Overlay for the modal */}
       <div className="overlay overlay--login" onClick={onClose}></div>
+
+      {/* Modal window */}
       <div className="login-form-window fade-in">
+        {/* Close button */}
         <button
           className="btn--close-modal login-btn--close-modal"
           onClick={onClose}
         >
           &times;
         </button>
+
+        {/* Success message */}
         {success ? (
-          // Render success message in place of the form
           <div className="message">
             <svg>
               <use href="img/icons.svg#icon-smile" />
@@ -61,18 +71,19 @@ export default function LoginModal({
             <p>{success}</p>
           </div>
         ) : loading ? (
-          // If loading, show spinner in the modal area instead of the form.
+          // Loading spinner
           <div className="spinner">
             <svg>
               <use href="img/icons.svg#icon-loading" />
             </svg>
           </div>
         ) : (
-          // Render the login form
+          // Login form
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="login__column">
               <h3 className="login__heading">Log In</h3>
 
+              {/* Email input */}
               <label htmlFor="loginEmail">Email</label>
               <input
                 id="loginEmail"
@@ -82,6 +93,8 @@ export default function LoginModal({
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+
+              {/* Password input */}
               <label htmlFor="loginPassword">Password</label>
               <input
                 id="loginPassword"
@@ -91,7 +104,11 @@ export default function LoginModal({
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
+              {/* Error message */}
               {error && <ErrorMessage text={error} />}
+
+              {/* Submit button */}
               <button className="login__btn" type="submit">
                 <svg>
                   <use href="img/icons.svg#icon-login" />
@@ -100,6 +117,7 @@ export default function LoginModal({
               </button>
             </div>
 
+            {/* Footer section */}
             <div className="login__footer">
               <p>
                 Don&apos;t have an account?
@@ -109,8 +127,7 @@ export default function LoginModal({
                   type="button"
                   onClick={() => {
                     onClose(); // Close the login modal
-                    // Assume you pass an onShowSignUp prop that calls setIsSignUpModalOpen(true)
-                    onShowSignUp();
+                    onShowSignUp(); // Open the signup modal
                   }}
                 >
                   Sign Up
