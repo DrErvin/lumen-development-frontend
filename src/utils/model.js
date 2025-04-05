@@ -208,6 +208,8 @@ export const uploadOpportunity = async function (newOpportunity) {
       contactPersonEmail: newOpportunity.contactPersonEmail,
       experienceRequired, // Processed field
       endingDate: newOpportunity.endingDate,
+      employeeInfo: EMPLOYEE_INFO,
+      featured: false,
     };
 
     // If real API was used we could now upload and get a response
@@ -222,7 +224,9 @@ export const uploadOpportunity = async function (newOpportunity) {
     console.log("Server Response:", response);
 
     // Add to global state
-    state.opportunity = createOpportunityObject([response.data]);
+    state.opportunity = createOpportunityObject([
+      response.newOpportunity,
+    ]);
     // state.opportunity = createOpportunityObject(data);
 
     console.log("Opportunity Uploaded:", state.opportunity);

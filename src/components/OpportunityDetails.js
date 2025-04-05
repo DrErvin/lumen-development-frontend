@@ -65,7 +65,9 @@ export default function OpportunityDetails({
                 </svg>
                 <p>
                   <strong>Experience:</strong>{" "}
-                  {opportunity.experience || "N/A"}
+                  {Array.isArray(opportunity.experience)
+                    ? opportunity.experience.join(", ")
+                    : opportunity.experience || "N/A"}
                 </p>
               </div>
               <div className="opportunity-engagement">
