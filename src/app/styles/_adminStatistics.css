@@ -31,7 +31,7 @@
   margin-bottom: 10px;
 }
 
-.statistics-card p {
+.statistics-card div {
   font-size: 2rem;
   font-weight: bold;
   color: var(--color-primary-darker);

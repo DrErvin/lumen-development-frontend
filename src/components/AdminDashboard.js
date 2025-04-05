@@ -84,19 +84,23 @@ const AdminDashboard = ({
         <div className="statistics-container">
           <div className="statistics-card">
             <h3>Total Applications</h3>
-            <p id="applications-count">
-              {loadingStats
-                ? "Loading..."
-                : stats?.applicationsCount ?? 0}
-            </p>
+            <div id="applications-count">
+              {loadingStats ? (
+                <LoadingSpinner />
+              ) : (
+                stats?.applicationsCount ?? 0
+              )}
+            </div>
           </div>
           <div className="statistics-card">
             <h3>Active Listings</h3>
-            <p id="opportunities-count">
-              {loadingStats
-                ? "Loading..."
-                : stats?.opportunitiesCount ?? 0}
-            </p>
+            <div id="opportunities-count">
+              {loadingStats ? (
+                <LoadingSpinner />
+              ) : (
+                stats?.opportunitiesCount ?? 0
+              )}
+            </div>
           </div>
           <div className="statistics-card pie-chart">
             <h3>Application Distribution by Country</h3>
